@@ -16,7 +16,7 @@ Pode ser feito via pgAdmin 4 ou via SQL Shell (psql)
 
 1. Logar no psql usando o login postgres
 
-   > Aceitar todas as opções default e preencher apenas o senha (cadastrada durante a instalação)
+   > Aceitar todas as opções default e preencher apenas a senha (cadastrada durante a instalação)
 
 2. Criar banco de dados e o usuário que será utilizado pela aplicação
 
