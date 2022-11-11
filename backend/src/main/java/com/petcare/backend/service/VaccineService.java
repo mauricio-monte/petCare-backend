@@ -1,8 +1,6 @@
 package com.petcare.backend.service;
 
-import com.petcare.backend.domain.User;
 import com.petcare.backend.domain.Vaccine;
-import com.petcare.backend.dto.UserDTO;
 import com.petcare.backend.dto.VaccineDTO;
 import com.petcare.backend.repository.VaccineRepository;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,5 @@
 package com.petcare.backend.domain;
 
-import com.petcare.backend.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,15 +24,15 @@ public class User {
     )
     private Long id;
     private String name;
+    private String username;
     private String email;
     private String passwordHash;
-    private String passwordSalt;
 
-    public User(String name, String email, String passwordHash, String passwordSalt) {
+    public User(String name, String username, String email, String passwordHash) {
         this.name = name;
+        this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.passwordSalt = passwordSalt;
     }
 
     @Override
@@ -41,9 +40,9 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
-                ", passwordSalt='" + passwordSalt + '\'' +
                 '}';
     }
 }

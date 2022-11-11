@@ -1,7 +1,9 @@
 package com.petcare.backend.controller;
 
 import com.petcare.backend.domain.User;
-import com.petcare.backend.dto.UserDTO;
+import com.petcare.backend.dto.user.LoginDTO;
+import com.petcare.backend.dto.user.LoginReturnDTO;
+import com.petcare.backend.dto.user.PostDTO;
 import com.petcare.backend.service.UserService;
 import com.petcare.backend.util.UrlConstants;
 import lombok.AllArgsConstructor;
@@ -21,9 +23,14 @@ public class UserController {
         return userService.getUsers();
     }
 
+    @GetMapping("/login")
+    public LoginReturnDTO login(@RequestBody LoginDTO loginCredentials) throws Exception {
+        return userService.login(loginCredentials);
+    }
+
     @PostMapping
-    public void createNewUser(@RequestBody UserDTO userDTO) {
-        userService.addNewUser(userDTO);
+    public void createNewUser(@RequestBody PostDTO postDTO) {
+        userService.addNewUser(postDTO);
     }
 
 }
