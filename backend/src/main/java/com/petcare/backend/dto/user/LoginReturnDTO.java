@@ -8,9 +8,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class LoginReturnDTO  extends StatusReturn {
+public class LoginReturnDTO extends StatusReturn {
     public Long id;
     public String name;
     public String username;
     public String email;
+
+    public LoginReturnDTO(StatusReturn statusReturn) {
+        super.setStatus(statusReturn.getStatus(), statusReturn.getStatusCode());
+    }
 }

@@ -32,8 +32,8 @@ public class UserController {
     }
 
     @PostMapping
-    public void createNewUser(@RequestBody PostDTO postDTO) {
-        userService.addNewUser(postDTO);
+    public ResponseEntity<StatusReturn> createNewUser(@RequestBody PostDTO postDTO) {
+        StatusReturn result = userService.addNewUser(postDTO);
+        return ResponseEntity.status(result.getStatusCode()).body(result);
     }
-
 }

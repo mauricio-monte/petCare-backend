@@ -15,4 +15,9 @@ public class StatusReturn {
 
     @SerializedName("status_code")
     private int statusCode;
+
+    public void setStatus(String status, int statusCode) {
+        this.setStatus(status);
+        this.setStatusCode(statusCode);
+    }
 }
