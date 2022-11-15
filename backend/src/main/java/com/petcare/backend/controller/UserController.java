@@ -1,10 +1,14 @@
 package com.petcare.backend.controller;
 
 import com.petcare.backend.domain.User;
-import com.petcare.backend.dto.UserDTO;
+import com.petcare.backend.dto.StatusReturn;
+import com.petcare.backend.dto.user.LoginDTO;
+import com.petcare.backend.dto.user.LoginReturnDTO;
+import com.petcare.backend.dto.user.PostDTO;
 import com.petcare.backend.service.UserService;
 import com.petcare.backend.util.UrlConstants;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,9 +25,15 @@ public class UserController {
         return userService.getUsers();
     }
 
-    @PostMapping
-    public void createNewUser(@RequestBody UserDTO userDTO) {
-        userService.addNewUser(userDTO);
+    @GetMapping("/login")
+    public ResponseEntity<StatusReturn> login(@RequestBody LoginDTO loginCredentials) throws Exception {
+        StatusReturn result = userService.login(loginCredentials);
+        return ResponseEntity.status(result.getStatusCode()).body(result);
     }
 
+    @PostMapping
+    public ResponseEntity<StatusReturn> createNewUser(@RequestBody PostDTO postDTO) {
+        StatusReturn result = userService.addNewUser(postDTO);
+        return ResponseEntity.status(result.getStatusCode()).body(result);
+    }
 }
