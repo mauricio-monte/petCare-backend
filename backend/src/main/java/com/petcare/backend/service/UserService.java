@@ -1,11 +1,14 @@
 package com.petcare.backend.service;
 
 import com.petcare.backend.domain.User;
+import com.petcare.backend.dto.StatusReturn;
 import com.petcare.backend.dto.user.LoginDTO;
 import com.petcare.backend.dto.user.LoginReturnDTO;
 import com.petcare.backend.dto.user.PostDTO;
+import com.petcare.backend.exception.LoginFailedException;
 import com.petcare.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,6 +49,14 @@ public class UserService {
     }
 
     public LoginReturnDTO login(LoginDTO loginCredentials) throws Exception {
+        try {
+            return validateLogin(loginCredentials);
+        } catch (LoginFailedException e) {
+            return (LoginReturnDTO) new StatusReturn(e.getMessage(), HttpStatus.FORBIDDEN.value());
+        }
+    }
+
+    private LoginReturnDTO validateLogin(LoginDTO loginCredentials) throws LoginFailedException {
         User user = this.getUserByUsername(loginCredentials.username);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(4);
 
@@ -57,7 +68,7 @@ public class UserService {
             userInfo.email = user.getEmail();
             return userInfo;
         } else {
-            throw new Exception("Login error");
+            throw new LoginFailedException();
         }
     }
 }
