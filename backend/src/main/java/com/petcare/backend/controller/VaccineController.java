@@ -18,13 +18,23 @@ public class VaccineController {
 
 
     @GetMapping
-    public List<Vaccine> getUsers(){
+    public List<Vaccine> getVaccines(){
         return vaccineService.getVaccines();
     }
 
+    @GetMapping("/{id}")
+    public Vaccine getVaccineById(@PathVariable("id") Long vaccineId){
+        return vaccineService.getVaccineById(vaccineId);
+    }
+
     @PostMapping
-    public void createNewUser(@RequestBody VaccineDTO vaccineDTO) {
-        vaccineService.addNewUser(vaccineDTO);
+    public Vaccine createNewVaccine(@RequestBody VaccineDTO vaccineDTO) {
+        return vaccineService.addNewVaccine(vaccineDTO);
+    }
+
+    @PutMapping
+    public Vaccine updateVaccine(@RequestBody VaccineDTO vaccineDTO) {
+        return vaccineService.addNewVaccine(vaccineDTO);
     }
 
 }

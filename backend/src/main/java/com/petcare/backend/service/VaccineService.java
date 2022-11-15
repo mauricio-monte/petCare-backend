@@ -1,13 +1,14 @@
 package com.petcare.backend.service;
 
-import com.petcare.backend.domain.User;
+import com.petcare.backend.domain.Dose;
 import com.petcare.backend.domain.Vaccine;
-import com.petcare.backend.dto.UserDTO;
+import com.petcare.backend.dto.DoseDTO;
 import com.petcare.backend.dto.VaccineDTO;
 import com.petcare.backend.repository.VaccineRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,19 +17,38 @@ import java.util.Optional;
 public class VaccineService {
 
     private final VaccineRepository vaccineRepository;
+    private final DoseService doseService;
 
     public List<Vaccine> getVaccines(){
         return vaccineRepository.findAll();
     }
 
-    public void addNewUser(VaccineDTO vaccineDTO) {
-        Optional<Vaccine> vaccineOptional = vaccineRepository.findVaccineByName(vaccineDTO.getName());
+    public Vaccine getVaccineById(Long vaccineId) {
+        Optional<Vaccine> optionalVaccine = vaccineRepository.findById(vaccineId);
 
-        if (vaccineOptional.isPresent()) {
-            throw new IllegalStateException("Erro no cadastro");
+        if (optionalVaccine.isPresent()) {
+            return optionalVaccine.get();
         }
 
-        Vaccine vaccine = new Vaccine(vaccineDTO);
-        vaccineRepository.save(vaccine);
+        return null;
     }
+
+    public Vaccine addNewVaccine(VaccineDTO vaccineDTO) {
+        boolean thisVaccineHasADose = vaccineDTO.getDoses().size() > 0;
+        List<Dose> doses = new ArrayList<>();
+
+        if (thisVaccineHasADose) {
+            for (DoseDTO dose: vaccineDTO.getDoses()) {
+                Dose newDose = doseService.addNewDose(dose);
+                doses.add(newDose);
+            }
+        }
+
+
+        Vaccine vaccine = new Vaccine(vaccineDTO);
+        vaccine.setDoses(doses);
+        return vaccineRepository.save(vaccine);
+    }
+
+
 }
