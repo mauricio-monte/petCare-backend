@@ -8,6 +8,7 @@ import com.petcare.backend.repository.VaccineRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,9 +29,10 @@ public class VaccineService {
 
         if (optionalVaccine.isPresent()) {
             return optionalVaccine.get();
+        } else {
+            throw new EntityNotFoundException("Vaccine not found");
         }
 
-        return null;
     }
 
     public Vaccine addNewVaccine(VaccineDTO vaccineDTO) {
