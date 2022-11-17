@@ -51,5 +51,28 @@ public class VaccineService {
         return vaccineRepository.save(vaccine);
     }
 
+    public Vaccine updateVaccine(Vaccine updatedVaccine) {
+        boolean thisVaccineExists = vaccineRepository.existsById(updatedVaccine.getId());
+        if (thisVaccineExists) {
+            updatedVaccine.setDoses(this.addUnsavedDoses(updatedVaccine));
+            return vaccineRepository.save(updatedVaccine);
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
 
+    private List<Dose> addUnsavedDoses(Vaccine vaccine) {
+        List<Dose> updatedDoses = new ArrayList<>();
+
+        for (Dose dose : vaccine.getDoses()) {
+            if(dose.getId() == null) {
+                Dose newDose = doseService.addNewDose(new DoseDTO(dose));
+                updatedDoses.add(newDose);
+            } else {
+                updatedDoses.add(dose);
+            }
+        }
+
+        return updatedDoses;
+    }
 }

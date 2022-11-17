@@ -41,8 +41,12 @@ public class VaccineController {
     }
 
     @PutMapping
-    public Vaccine updateVaccine(@RequestBody VaccineDTO vaccineDTO) {
-        return vaccineService.addNewVaccine(vaccineDTO);
+    public ResponseEntity<Vaccine> updateVaccine(@RequestBody Vaccine vaccine) {
+        try {
+            return new ResponseEntity<>(vaccineService.updateVaccine(vaccine), HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaccine not found", e);
+        }
     }
 
 }
