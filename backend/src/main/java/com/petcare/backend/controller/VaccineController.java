@@ -49,4 +49,14 @@ public class VaccineController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Vaccine> deleteVaccine(@PathVariable("id") Long vaccineId) {
+        try {
+            vaccineService.deleteVaccine(vaccineId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaccine not found", e);
+        }
+    }
+
 }

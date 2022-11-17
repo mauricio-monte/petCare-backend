@@ -75,4 +75,14 @@ public class VaccineService {
 
         return updatedDoses;
     }
+
+    public void deleteVaccine(Long vaccineId){
+        boolean thisVaccineExists = vaccineRepository.existsById(vaccineId);
+
+        if (thisVaccineExists) {
+            vaccineRepository.deleteById(vaccineId);
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
 }
