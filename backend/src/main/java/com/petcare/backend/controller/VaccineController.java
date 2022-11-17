@@ -6,6 +6,7 @@ import com.petcare.backend.service.VaccineService;
 import com.petcare.backend.util.UrlConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -21,16 +22,16 @@ public class VaccineController {
 
 
     @GetMapping
-    public List<Vaccine> getVaccines(){
+    public List<Vaccine> getVaccines() {
         return vaccineService.getVaccines();
     }
 
     @GetMapping("/{id}")
-    public Vaccine getVaccineById(@PathVariable("id") Long vaccineId){
+    public ResponseEntity<Vaccine> getVaccineById(@PathVariable("id") Long vaccineId) {
         try {
-            return vaccineService.getVaccineById(vaccineId);
+            return new ResponseEntity<>(vaccineService.getVaccineById(vaccineId), HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vaccine not found", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaccine not found", e);
         }
     }
 

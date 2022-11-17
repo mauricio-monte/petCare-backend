@@ -20,7 +20,7 @@ public class VaccineService {
     private final VaccineRepository vaccineRepository;
     private final DoseService doseService;
 
-    public List<Vaccine> getVaccines(){
+    public List<Vaccine> getVaccines() {
         return vaccineRepository.findAll();
     }
 
@@ -30,7 +30,7 @@ public class VaccineService {
         if (optionalVaccine.isPresent()) {
             return optionalVaccine.get();
         } else {
-            throw new EntityNotFoundException("Vaccine not found");
+            throw new EntityNotFoundException();
         }
 
     }
@@ -40,12 +40,11 @@ public class VaccineService {
         List<Dose> doses = new ArrayList<>();
 
         if (thisVaccineHasADose) {
-            for (DoseDTO dose: vaccineDTO.getDoses()) {
+            for (DoseDTO dose : vaccineDTO.getDoses()) {
                 Dose newDose = doseService.addNewDose(dose);
                 doses.add(newDose);
             }
         }
-
 
         Vaccine vaccine = new Vaccine(vaccineDTO);
         vaccine.setDoses(doses);
