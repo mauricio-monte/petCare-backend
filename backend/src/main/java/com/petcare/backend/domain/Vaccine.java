@@ -36,7 +36,7 @@ public class Vaccine {
     @Column
     private boolean singleDose;
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     private List<Dose> doses;
 
     public Vaccine(VaccineDTO vaccineDTO) {

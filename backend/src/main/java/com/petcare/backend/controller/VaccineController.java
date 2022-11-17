@@ -22,8 +22,8 @@ public class VaccineController {
 
 
     @GetMapping
-    public List<Vaccine> getVaccines() {
-        return vaccineService.getVaccines();
+    public ResponseEntity<List<Vaccine>> getVaccines() {
+        return new ResponseEntity<>(vaccineService.getVaccines(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -36,8 +36,8 @@ public class VaccineController {
     }
 
     @PostMapping
-    public Vaccine createNewVaccine(@RequestBody VaccineDTO vaccineDTO) {
-        return vaccineService.addNewVaccine(vaccineDTO);
+    public ResponseEntity<Vaccine> createNewVaccine(@RequestBody VaccineDTO vaccineDTO) {
+        return new ResponseEntity<>(vaccineService.addNewVaccine(vaccineDTO), HttpStatus.CREATED);
     }
 
     @PutMapping
