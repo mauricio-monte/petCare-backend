@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "vaccines")
@@ -27,14 +28,21 @@ public class Vaccine {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String description;
 
     @Column
-    private String veterinaryName;
+    private String veterinaryClinic;
+
+    @Column
+    private boolean singleDose;
+
+    @OneToMany(orphanRemoval = true)
+    private List<Dose> doses;
 
     public Vaccine(VaccineDTO vaccineDTO) {
-        this.name = vaccineDTO.getName();
-        this.veterinaryName = vaccineDTO.getVeterinaryName();
+        this.description = vaccineDTO.getDescription();
+        this.veterinaryClinic = vaccineDTO.getVeterinaryClinic();
+        this.singleDose = vaccineDTO.isSingleDose();
     }
 
 }
