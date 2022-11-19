@@ -1,16 +1,19 @@
 # petCare-backend
 
-Backend do projeto PetCare, implementado durante a disciplina de Projeto de Software 1
+Backend do projeto PetCare, implementado durante a disciplina de Projeto de Software 1  
+Uma versão em produção deste app está disponível em: `https://petcare-backend-production.up.railway.app/api/v1`
 
-## Dependências
+## Como executar este projeto localmente
 
-Para executar este projeto, é necessário instalar as dependências:
+### Dependências
+
+Para executar este projeto localmente, é necessário instalar as dependências:
 
 - [Oracle OpenJDK 19](https://jdk.java.net/19/)
 - [PostgreSQL 15](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
   > Durante a instalação do PostgreSQL, será pedido que registre uma senha do usuário superuser (postgres). Guarde essa senha pois será usada em outras etapas
 
-## Configuração Inicial do Banco de Dados
+### Configuração Inicial do Banco de Dados
 
 Pode ser feito via pgAdmin 4 ou via SQL Shell (psql)
 
