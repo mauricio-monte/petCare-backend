@@ -19,12 +19,12 @@ public class PetService {
   private PetRepository petRepository;
   private VaccineService vaccineService;
 
-  public List<Pet> getAnimals() {
+  public List<Pet> getPets() {
     return petRepository.findAll();
   }
 
-  public Pet getAnimalById(Long animalId) {
-    Optional<Pet> optionalAnimal = petRepository.findById(animalId);
+  public Pet getPetById(Long petId) {
+    Optional<Pet> optionalAnimal = petRepository.findById(petId);
 
     if (optionalAnimal.isPresent()) {
       return optionalAnimal.get();
@@ -33,7 +33,7 @@ public class PetService {
     }
   }
 
-  public Pet addNewAnimal(PetDTO petDTO) {
+  public Pet addNewPet(PetDTO petDTO) {
     boolean thisAnimalHasAVaccine = petDTO.getVaccines().size() > 0;
 
     List<Vaccine> vaccines = new ArrayList<>();
@@ -51,7 +51,7 @@ public class PetService {
     return petRepository.save(pet);
   }
 
-  public Pet updateAnimal(Pet updatedPet) {
+  public Pet updatePet(Pet updatedPet) {
     boolean thisAnimalExists = petRepository.existsById(updatedPet.getId());
 
     if (thisAnimalExists) {
@@ -77,11 +77,11 @@ public class PetService {
     return updatedVaccines;
   }
 
-  public void deleteAnimal(Long animalId) {
-    boolean thisAnimalExists = petRepository.existsById(animalId);
+  public void deletePet(Long petId) {
+    boolean thisAnimalExists = petRepository.existsById(petId);
 
     if (thisAnimalExists) {
-      petRepository.deleteById(animalId);
+      petRepository.deleteById(petId);
     } else {
       throw new EntityNotFoundException();
     }

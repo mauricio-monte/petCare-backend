@@ -30,44 +30,44 @@ public class PetController {
     private PetService petService;
 
     @GetMapping
-    public ResponseEntity<List<Pet>> getAnimals() {
-        return new ResponseEntity<>(petService.getAnimals(), HttpStatus.OK);
+    public ResponseEntity<List<Pet>> getPets() {
+        return new ResponseEntity<>(petService.getPets(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pet> getAnimalById(@PathVariable("id") Long animalId) {
+    public ResponseEntity<Pet> getPetById(@PathVariable("id") Long petId) {
         try {
-            return new ResponseEntity<>(petService.getAnimalById(animalId), HttpStatus.OK);
+            return new ResponseEntity<>(petService.getPetById(petId), HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Animal not found", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found", e);
         }
     }
 
     @PostMapping
-    public ResponseEntity<Pet> createNewAnimal(@RequestBody PetDTO petDTO) {
+    public ResponseEntity<Pet> createNewPet(@RequestBody PetDTO petDTO) {
         try {
-            return new ResponseEntity<>(petService.addNewAnimal(petDTO), HttpStatus.OK);
+            return new ResponseEntity<>(petService.addNewPet(petDTO), HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Animal not found", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found", e);
         }
     }
 
     @PutMapping
-    public ResponseEntity<Pet> updateAnimal(@RequestBody Pet pet) {
+    public ResponseEntity<Pet> updatePet(@RequestBody Pet pet) {
         try {
-            return new ResponseEntity<>(petService.updateAnimal(pet), HttpStatus.OK);
+            return new ResponseEntity<>(petService.updatePet(pet), HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Animal not found", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found", e);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Pet> deleteAnimal(@PathVariable("id") Long animalId) {
+    public ResponseEntity<Pet> deletePet(@PathVariable("id") Long petId) {
         try {
-            petService.deleteAnimal(animalId);
+            petService.deletePet(petId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Animal not found", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found", e);
         }
     }
 
