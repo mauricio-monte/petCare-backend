@@ -3,7 +3,6 @@ package com.petcare.backend.controller;
 import com.petcare.backend.domain.User;
 import com.petcare.backend.dto.StatusReturn;
 import com.petcare.backend.dto.user.LoginDTO;
-import com.petcare.backend.dto.user.LoginReturnDTO;
 import com.petcare.backend.dto.user.PostDTO;
 import com.petcare.backend.service.UserService;
 import com.petcare.backend.util.UrlConstants;
