@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -23,11 +24,17 @@ public class User {
             generator = "user_sequence"
     )
     private Long id;
+    @Column
     private String name;
+    @Column
     private String username;
+    @Column
     private String email;
+    @Column
     private String passwordHash;
 
+    @OneToMany(orphanRemoval = true)
+    private List<Pet> pets;
     public User(String name, String username, String email, String passwordHash) {
         this.name = name;
         this.username = username;
