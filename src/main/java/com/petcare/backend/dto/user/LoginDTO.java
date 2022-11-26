@@ -1,7 +1,6 @@
 package com.petcare.backend.dto.user;
 
 import com.google.gson.annotations.SerializedName;
-import com.petcare.backend.dto.StatusReturn;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
