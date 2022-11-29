@@ -1,6 +1,7 @@
 package com.petcare.backend.service;
 
 import com.petcare.backend.domain.User;
+import com.petcare.backend.dto.UserDTO;
 import com.petcare.backend.dto.user.LoginDTO;
 import com.petcare.backend.dto.user.LoginReturnDTO;
 import com.petcare.backend.dto.user.PostDTO;
@@ -69,10 +70,12 @@ public class UserService {
         }
     }
 
-    public LoginReturnDTO updateUser(User user) throws UserNotFoundException {
-        boolean thisUserExists = userRepository.existsById(user.getId());
+    public LoginReturnDTO updateUser(UserDTO userDTO) throws UserNotFoundException {
+        Optional<User> userOptional = userRepository.findById(userDTO.getId());
 
-        if (thisUserExists) {
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.updateUser(userDTO);
             return new LoginReturnDTO(userRepository.save(user));
         } else {
             throw new UserNotFoundException();

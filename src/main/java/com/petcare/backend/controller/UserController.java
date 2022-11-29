@@ -1,6 +1,7 @@
 package com.petcare.backend.controller;
 
 import com.petcare.backend.domain.User;
+import com.petcare.backend.dto.UserDTO;
 import com.petcare.backend.dto.user.LoginDTO;
 import com.petcare.backend.dto.user.LoginReturnDTO;
 import com.petcare.backend.dto.user.PostDTO;
@@ -50,9 +51,9 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<LoginReturnDTO> updateUser(@RequestBody User user) {
+    public ResponseEntity<LoginReturnDTO> updateUser(@RequestBody UserDTO userDTO) {
         try {
-            return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
+            return new ResponseEntity<>(userService.updateUser(userDTO), HttpStatus.OK);
         } catch (UserNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error updating user", e);
         }
