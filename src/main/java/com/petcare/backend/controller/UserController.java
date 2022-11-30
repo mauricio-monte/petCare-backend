@@ -8,6 +8,7 @@ import com.petcare.backend.dto.user.PostDTO;
 import com.petcare.backend.exception.EmailAlreadyRegisteredException;
 import com.petcare.backend.exception.LoginFailedException;
 import com.petcare.backend.exception.UserNotFoundException;
+import com.petcare.backend.exception.UsernameAlreadyRegisteredException;
 import com.petcare.backend.service.UserService;
 import com.petcare.backend.util.UrlConstants;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,7 @@ public class UserController {
     public ResponseEntity<LoginReturnDTO> login(@RequestBody LoginDTO loginCredentials) throws Exception {
         try {
             LoginReturnDTO result = userService.login(loginCredentials);
-            return new ResponseEntity<>(result, HttpStatus.CREATED);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (LoginFailedException | UserNotFoundException loginException) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Login error", loginException);
         }
@@ -45,8 +46,8 @@ public class UserController {
     public ResponseEntity<LoginReturnDTO> createNewUser(@RequestBody PostDTO postDTO) {
         try {
             return new ResponseEntity<>(userService.addNewUser(postDTO), HttpStatus.CREATED);
-        } catch (EmailAlreadyRegisteredException emailException) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Error creating user", emailException);
+        } catch (EmailAlreadyRegisteredException | UsernameAlreadyRegisteredException conflictException) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, conflictException.getMessage(), conflictException);
         }
     }
 

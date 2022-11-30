@@ -8,6 +8,7 @@ import com.petcare.backend.dto.user.PostDTO;
 import com.petcare.backend.exception.EmailAlreadyRegisteredException;
 import com.petcare.backend.exception.LoginFailedException;
 import com.petcare.backend.exception.UserNotFoundException;
+import com.petcare.backend.exception.UsernameAlreadyRegisteredException;
 import com.petcare.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,13 +26,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public LoginReturnDTO addNewUser(PostDTO userDTO) throws EmailAlreadyRegisteredException {
-        validateEmail(userDTO.email);
+    public LoginReturnDTO addNewUser(PostDTO userDTO) throws EmailAlreadyRegisteredException, UsernameAlreadyRegisteredException {
+        validateEmail(userDTO.getEmail());
+        validateUsername(userDTO.getUsername());
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(4);
-        String passwordHash = encoder.encode(userDTO.password);
+        String passwordHash = encoder.encode(userDTO.getPassword());
 
-        User newUser = userRepository.save(new User(userDTO.name, userDTO.username, userDTO.email, passwordHash));
+        User newUser = userRepository.save(new User(userDTO.getName(), userDTO.getUsername(), userDTO.getEmail(), passwordHash));
 
         return new LoginReturnDTO(newUser);
     }
@@ -41,32 +43,10 @@ public class UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(4);
 
         if (encoder.matches(loginCredentials.password, user.getPasswordHash())) {
-            LoginReturnDTO userInfo = new LoginReturnDTO();
-            userInfo.id = user.getId();
-            userInfo.name = user.getName();
-            userInfo.username = user.getUsername();
-            userInfo.email = user.getEmail();
+            LoginReturnDTO userInfo = new LoginReturnDTO(user);
             return userInfo;
         } else {
             throw new LoginFailedException();
-        }
-    }
-
-    private User getUserByUsername(String username) throws UserNotFoundException {
-        Optional<User> optionalUser = userRepository.findUserByUsername(username);
-
-        if (optionalUser.isPresent()) {
-            return optionalUser.get();
-        } else {
-            throw new UserNotFoundException();
-        }
-    }
-
-    private void validateEmail(String email) throws EmailAlreadyRegisteredException {
-        Optional<User> userOptional = userRepository.findUserByEmail(email);
-
-        if (userOptional.isPresent()) {
-            throw new EmailAlreadyRegisteredException();
         }
     }
 
@@ -83,10 +63,30 @@ public class UserService {
     }
 
     public void deleteUser(Long userId) throws UserNotFoundException {
-        boolean thisUserExists = userRepository.existsById(userId);
-
-        if (thisUserExists) {
+        if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);
+        } else {
+            throw new UserNotFoundException();
+        }
+    }
+
+    private void validateEmail(String email) throws EmailAlreadyRegisteredException {
+        if (userRepository.existsByEmail(email)) {
+            throw new EmailAlreadyRegisteredException();
+        }
+    }
+
+    private void validateUsername(String username) throws UsernameAlreadyRegisteredException {
+        if (userRepository.existsByUsername(username)) {
+            throw new UsernameAlreadyRegisteredException();
+        }
+    }
+
+    private User getUserByUsername(String username) throws UserNotFoundException {
+        Optional<User> optionalUser = userRepository.findUserByUsername(username);
+
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
         } else {
             throw new UserNotFoundException();
         }

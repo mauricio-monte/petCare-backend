@@ -9,4 +9,6 @@ public class StatusConstants {
     public static final String USER_NOT_FOUND_STATUS = "user_not_found";
     public static final String EMAIL_ALREADY_REGISTERED_STATUS = "email_already_registered";
 
+    public static final String USERNAME_ALREADY_REGISTERED_STATUS = "username_already_registered";
+
 }

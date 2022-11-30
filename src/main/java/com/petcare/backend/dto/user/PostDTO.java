@@ -1,9 +1,11 @@
 package com.petcare.backend.dto.user;
 
+import lombok.Data;
 
+@Data
 public class PostDTO {
-    public String name;
-    public String username;
-    public String email;
-    public String password;
+    private String name;
+    private String username;
+    private String email;
+    private String password;
 }

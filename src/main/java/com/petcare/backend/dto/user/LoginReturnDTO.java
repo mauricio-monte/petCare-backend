@@ -12,12 +12,12 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class LoginReturnDTO {
-    public Long id;
-    public String name;
-    public String username;
-    public String email;
+    private Long id;
+    private String name;
+    private String username;
+    private String email;
 
-    public List<Pet> pets;
+    private List<Pet> pets;
 
     public LoginReturnDTO(User user) {
         this.id = user.getId();
