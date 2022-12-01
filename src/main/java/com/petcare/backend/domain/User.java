@@ -1,5 +1,6 @@
 package com.petcare.backend.domain;
 
+import com.petcare.backend.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,6 +41,13 @@ public class User {
         this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;
+    }
+
+    public void updateUser(UserDTO userDTO) {
+        if (userDTO.getName() != null) this.name = userDTO.getName();
+        if (userDTO.getUsername() != null) this.username = userDTO.getUsername();
+        if (userDTO.getEmail() != null) this.email = userDTO.getEmail();
+        if (userDTO.getPets() != null) this.pets = userDTO.getPets();
     }
 
     @Override
