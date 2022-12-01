@@ -1,14 +1,21 @@
 package com.petcare.backend.controller;
 
 import com.petcare.backend.domain.User;
-import com.petcare.backend.dto.StatusReturn;
+import com.petcare.backend.dto.UserDTO;
 import com.petcare.backend.dto.user.LoginDTO;
+import com.petcare.backend.dto.user.LoginReturnDTO;
 import com.petcare.backend.dto.user.PostDTO;
+import com.petcare.backend.exception.EmailAlreadyRegisteredException;
+import com.petcare.backend.exception.LoginFailedException;
+import com.petcare.backend.exception.UserNotFoundException;
+import com.petcare.backend.exception.UsernameAlreadyRegisteredException;
 import com.petcare.backend.service.UserService;
 import com.petcare.backend.util.UrlConstants;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,14 +32,41 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<StatusReturn> login(@RequestBody LoginDTO loginCredentials) throws Exception {
-        StatusReturn result = userService.login(loginCredentials);
-        return ResponseEntity.status(result.getStatusCode()).body(result);
+    public ResponseEntity<LoginReturnDTO> login(@RequestBody LoginDTO loginCredentials) throws Exception {
+        try {
+            LoginReturnDTO result = userService.login(loginCredentials);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (LoginFailedException | UserNotFoundException loginException) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Login error", loginException);
+        }
+
     }
 
     @PostMapping
-    public ResponseEntity<StatusReturn> createNewUser(@RequestBody PostDTO postDTO) {
-        StatusReturn result = userService.addNewUser(postDTO);
-        return ResponseEntity.status(result.getStatusCode()).body(result);
+    public ResponseEntity<LoginReturnDTO> createNewUser(@RequestBody PostDTO postDTO) {
+        try {
+            return new ResponseEntity<>(userService.addNewUser(postDTO), HttpStatus.CREATED);
+        } catch (EmailAlreadyRegisteredException | UsernameAlreadyRegisteredException conflictException) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, conflictException.getMessage(), conflictException);
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<LoginReturnDTO> updateUser(@RequestBody UserDTO userDTO) {
+        try {
+            return new ResponseEntity<>(userService.updateUser(userDTO), HttpStatus.OK);
+        } catch (UserNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error updating user", e);
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<User> deleteUser(@PathVariable("id") Long userId) {
+        try {
+            userService.deleteUser(userId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (UserNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error deleting user", e);
+        }
     }
 }
