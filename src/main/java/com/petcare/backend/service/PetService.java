@@ -4,6 +4,7 @@ import com.petcare.backend.domain.Pet;
 import com.petcare.backend.domain.Vaccine;
 import com.petcare.backend.dto.PetDTO;
 import com.petcare.backend.dto.VaccineDTO;
+import com.petcare.backend.exception.PetNotFoundException;
 import com.petcare.backend.repository.PetRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,13 @@ public class PetService {
     return petRepository.findAll();
   }
 
-  public Pet getPetById(Long petId) {
+  public Pet getPetById(Long petId) throws PetNotFoundException {
     Optional<Pet> optionalAnimal = petRepository.findById(petId);
 
     if (optionalAnimal.isPresent()) {
       return optionalAnimal.get();
     } else {
-      throw new EntityNotFoundException();
+      throw new PetNotFoundException();
     }
   }
 
@@ -51,14 +52,14 @@ public class PetService {
     return petRepository.save(pet);
   }
 
-  public Pet updatePet(Pet updatedPet) {
+  public Pet updatePet(Pet updatedPet) throws PetNotFoundException {
     boolean thisAnimalExists = petRepository.existsById(updatedPet.getId());
 
     if (thisAnimalExists) {
       updatedPet.setVaccines(this.addUnsavedVaccines(updatedPet));
       return petRepository.save(updatedPet);
     } else {
-      throw new EntityNotFoundException();
+      throw new PetNotFoundException();
     }
   }
 
@@ -77,13 +78,13 @@ public class PetService {
     return updatedVaccines;
   }
 
-  public void deletePet(Long petId) {
+  public void deletePet(Long petId) throws PetNotFoundException {
     boolean thisAnimalExists = petRepository.existsById(petId);
 
     if (thisAnimalExists) {
       petRepository.deleteById(petId);
     } else {
-      throw new EntityNotFoundException();
+      throw new PetNotFoundException();
     }
   }
 

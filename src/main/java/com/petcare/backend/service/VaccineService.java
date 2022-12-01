@@ -4,6 +4,7 @@ import com.petcare.backend.domain.Dose;
 import com.petcare.backend.domain.Vaccine;
 import com.petcare.backend.dto.DoseDTO;
 import com.petcare.backend.dto.VaccineDTO;
+import com.petcare.backend.exception.VaccineNotFoundException;
 import com.petcare.backend.repository.VaccineRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,13 +25,13 @@ public class VaccineService {
         return vaccineRepository.findAll();
     }
 
-    public Vaccine getVaccineById(Long vaccineId) {
+    public Vaccine getVaccineById(Long vaccineId) throws VaccineNotFoundException {
         Optional<Vaccine> optionalVaccine = vaccineRepository.findById(vaccineId);
 
         if (optionalVaccine.isPresent()) {
             return optionalVaccine.get();
         } else {
-            throw new EntityNotFoundException();
+            throw new VaccineNotFoundException();
         }
 
     }
@@ -51,13 +52,13 @@ public class VaccineService {
         return vaccineRepository.save(vaccine);
     }
 
-    public Vaccine updateVaccine(Vaccine updatedVaccine) {
+    public Vaccine updateVaccine(Vaccine updatedVaccine) throws VaccineNotFoundException {
         boolean thisVaccineExists = vaccineRepository.existsById(updatedVaccine.getId());
         if (thisVaccineExists) {
             updatedVaccine.setDoses(this.addUnsavedDoses(updatedVaccine));
             return vaccineRepository.save(updatedVaccine);
         } else {
-            throw new EntityNotFoundException();
+            throw new VaccineNotFoundException();
         }
     }
 
@@ -76,13 +77,13 @@ public class VaccineService {
         return updatedDoses;
     }
 
-    public void deleteVaccine(Long vaccineId){
+    public void deleteVaccine(Long vaccineId) throws VaccineNotFoundException {
         boolean thisVaccineExists = vaccineRepository.existsById(vaccineId);
 
         if (thisVaccineExists) {
             vaccineRepository.deleteById(vaccineId);
         } else {
-            throw new EntityNotFoundException();
+            throw new VaccineNotFoundException();
         }
     }
 }
