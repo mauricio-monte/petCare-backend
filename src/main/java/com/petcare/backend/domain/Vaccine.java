@@ -55,4 +55,11 @@ public class Vaccine {
         if (updatedVaccine.getSingleDose() != null) this.singleDose = updatedVaccine.getSingleDose();
     }
 
+    public void updateDoses(List<Dose> updatedDoses) {
+        if (!this.doses.equals(updatedDoses)) {
+            this.doses.clear();
+            this.doses.addAll(updatedDoses);
+        }
+    }
+
 }

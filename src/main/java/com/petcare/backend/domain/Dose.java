@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "doses")
@@ -36,5 +37,17 @@ public class Dose {
     public Dose(DoseDTO doseDTO) {
         this.date = doseDTO.getDate();
         this.applied = doseDTO.isApplied();
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dose dose = (Dose) o;
+        return date.equals(dose.date) && applied == dose.applied;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, applied);
     }
 }

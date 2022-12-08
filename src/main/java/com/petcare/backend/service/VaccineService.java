@@ -56,8 +56,9 @@ public class VaccineService {
         if (vaccineOptional.isPresent()) {
             Vaccine vaccine = vaccineOptional.get();
             vaccine.updateVaccine(updatedVaccine);
-            List<Dose> updatedDoses = updateDoses(updatedVaccine);
-            vaccine.setDoses(updatedDoses);
+//            List<Dose> updatedDoses = updateDoses(updatedVaccine);
+            List<Dose> updatedDoses = updatedVaccine.getDoses();
+            vaccine.updateDoses(updatedDoses);
             vaccineRepository.save(vaccine);
 
             return vaccine;
@@ -66,15 +67,15 @@ public class VaccineService {
         }
     }
 
-    private List<Dose> updateDoses(Vaccine updatedVaccine) {
-        List<Dose> doses = new ArrayList<>();
-        if (updatedVaccine.getDoses().size() > 0) {
-            for (Dose dose : updatedVaccine.getDoses()) {
-                Dose newDose = doseService.updateDose(dose);
-                doses.add(newDose);
-            }
-        } return doses;
-    }
+//    private List<Dose> updateDoses(Vaccine updatedVaccine) {
+//        List<Dose> doses = new ArrayList<>();
+//        if (updatedVaccine.getDoses().size() > 0) {
+//            for (Dose dose : updatedVaccine.getDoses()) {
+//                Dose newDose = doseService.updateDose(dose);
+//                doses.add(newDose);
+//            }
+//        } return doses;
+//    }
 
     private List<Dose> addUnsavedDoses(Vaccine vaccine) {
         List<Dose> updatedDoses = new ArrayList<>();
