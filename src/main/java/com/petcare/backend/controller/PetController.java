@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.petcare.backend.exception.PetNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,8 +39,8 @@ public class PetController {
     public ResponseEntity<Pet> getPetById(@PathVariable("id") Long petId) {
         try {
             return new ResponseEntity<>(petService.getPetById(petId), HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found", e);
+        } catch (PetNotFoundException petException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, petException.getMessage(), petException);
         }
     }
 
@@ -47,8 +48,8 @@ public class PetController {
     public ResponseEntity<Pet> createNewPet(@RequestBody PetDTO petDTO) {
         try {
             return new ResponseEntity<>(petService.addNewPet(petDTO), HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found", e);
+        } catch (EntityNotFoundException petException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, petException.getMessage(), petException);
         }
     }
 
@@ -56,8 +57,8 @@ public class PetController {
     public ResponseEntity<Pet> updatePet(@RequestBody Pet pet) {
         try {
             return new ResponseEntity<>(petService.updatePet(pet), HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found", e);
+        } catch (PetNotFoundException petException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, petException.getMessage(), petException);
         }
     }
 
@@ -66,8 +67,8 @@ public class PetController {
         try {
             petService.deletePet(petId);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found", e);
+        } catch (PetNotFoundException petException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, petException.getMessage(), petException);
         }
     }
 

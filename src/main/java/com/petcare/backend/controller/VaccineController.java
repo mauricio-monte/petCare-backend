@@ -2,6 +2,7 @@ package com.petcare.backend.controller;
 
 import com.petcare.backend.domain.Vaccine;
 import com.petcare.backend.dto.VaccineDTO;
+import com.petcare.backend.exception.VaccineNotFoundException;
 import com.petcare.backend.service.VaccineService;
 import com.petcare.backend.util.UrlConstants;
 import lombok.AllArgsConstructor;
@@ -30,8 +31,8 @@ public class VaccineController {
     public ResponseEntity<Vaccine> getVaccineById(@PathVariable("id") Long vaccineId) {
         try {
             return new ResponseEntity<>(vaccineService.getVaccineById(vaccineId), HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaccine not found", e);
+        } catch (VaccineNotFoundException vaccineException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, vaccineException.getMessage(), vaccineException);
         }
     }
 
@@ -44,8 +45,8 @@ public class VaccineController {
     public ResponseEntity<Vaccine> updateVaccine(@RequestBody Vaccine vaccine) {
         try {
             return new ResponseEntity<>(vaccineService.updateVaccine(vaccine), HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaccine not found", e);
+        } catch (VaccineNotFoundException vaccineException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, vaccineException.getMessage(), vaccineException);
         }
     }
 
@@ -54,8 +55,8 @@ public class VaccineController {
         try {
             vaccineService.deleteVaccine(vaccineId);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vaccine not found", e);
+        } catch (VaccineNotFoundException vaccineException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, vaccineException.getMessage(), vaccineException);
         }
     }
 

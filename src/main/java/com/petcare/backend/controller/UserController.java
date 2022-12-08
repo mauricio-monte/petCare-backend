@@ -37,7 +37,7 @@ public class UserController {
             LoginReturnDTO result = userService.login(loginCredentials);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (LoginFailedException | UserNotFoundException loginException) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Login error", loginException);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, loginException.getMessage(), loginException);
         }
 
     }
@@ -55,8 +55,8 @@ public class UserController {
     public ResponseEntity<LoginReturnDTO> updateUser(@RequestBody UserDTO userDTO) {
         try {
             return new ResponseEntity<>(userService.updateUser(userDTO), HttpStatus.OK);
-        } catch (UserNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error updating user", e);
+        } catch (UserNotFoundException updateException) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, updateException.getMessage(), updateException);
         }
     }
 
@@ -65,8 +65,8 @@ public class UserController {
         try {
             userService.deleteUser(userId);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (UserNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error deleting user", e);
+        } catch (UserNotFoundException deleteException) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, deleteException.getMessage(), deleteException);
         }
     }
 }
