@@ -14,16 +14,17 @@ import java.util.List;
 @NoArgsConstructor
 public class VaccineDTO {
     private Long id;
+    private Long petId;
     private String description;
     private String veterinaryClinic;
-    private boolean singleDose;
+    private Boolean singleDose;
     private List<DoseDTO> doses;
 
     public VaccineDTO(Vaccine vaccine) {
         this.id = vaccine.getId();
         this.description = vaccine.getDescription();
         this.veterinaryClinic = vaccine.getVeterinaryClinic();
-        this.singleDose = vaccine.isSingleDose();
+        this.singleDose = vaccine.getSingleDose();
 
         List<DoseDTO> doses = new ArrayList<>();
 

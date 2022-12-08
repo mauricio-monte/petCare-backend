@@ -2,14 +2,7 @@ package com.petcare.backend.domain;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.petcare.backend.dto.PetDTO;
 
@@ -33,10 +26,10 @@ public class Pet {
     private String name;
 
     @Column(nullable = false)
-    private int age;
+    private Integer age;
 
     @Column
-    private float weight;
+    private Float weight;
 
     @Column
     private String species;
@@ -47,7 +40,7 @@ public class Pet {
     @Column
     private String allergies;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Vaccine> vaccines;
 
     public Pet(PetDTO petDTO) {
@@ -59,4 +52,12 @@ public class Pet {
         this.allergies = petDTO.getAllergies();
     }
 
+    public void updatePet(Pet pet) {
+        if (pet.getName() != null) this.name = pet.getName();
+        if (pet.getAge() != null) this.age = pet.getAge();
+        if (pet.getWeight() != null) this.weight = pet.getWeight();
+        if (pet.getSpecies() != null) this.species = pet.getSpecies();
+        if (pet.getRace() != null) this.race = pet.getRace();
+        if (pet.getAllergies() != null) this.allergies = pet.getAllergies();
+    }
 }
