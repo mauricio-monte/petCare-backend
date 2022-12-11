@@ -27,6 +27,9 @@ public class Vaccine {
     )
     private Long id;
 
+    @Column
+    private Long petId;
+    
     @Column(nullable = false)
     private String description;
 
@@ -34,15 +37,29 @@ public class Vaccine {
     private String veterinaryClinic;
 
     @Column
-    private boolean singleDose;
+    private Boolean singleDose;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Dose> doses;
 
     public Vaccine(VaccineDTO vaccineDTO) {
+        this.petId = vaccineDTO.getPetId();
         this.description = vaccineDTO.getDescription();
         this.veterinaryClinic = vaccineDTO.getVeterinaryClinic();
-        this.singleDose = vaccineDTO.isSingleDose();
+        this.singleDose = vaccineDTO.getSingleDose();
+    }
+
+    public void updateVaccine(Vaccine updatedVaccine) {
+        if (updatedVaccine.getDescription() != null) this.description = updatedVaccine.getDescription();
+        if (updatedVaccine.getVeterinaryClinic() != null) this.veterinaryClinic = updatedVaccine.getVeterinaryClinic();
+        if (updatedVaccine.getSingleDose() != null) this.singleDose = updatedVaccine.getSingleDose();
+    }
+
+    public void updateDoses(List<Dose> updatedDoses) {
+        if (!this.doses.equals(updatedDoses)) {
+            this.doses.clear();
+            this.doses.addAll(updatedDoses);
+        }
     }
 
 }

@@ -15,4 +15,8 @@ public class DoseService {
     public Dose addNewDose(DoseDTO doseDTO) {
         return doseRepository.save(new Dose(doseDTO));
     }
+
+    public Dose updateDose(Dose dose) {
+        return this.doseRepository.save(dose);
+    }
 }

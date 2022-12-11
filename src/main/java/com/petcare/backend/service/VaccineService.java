@@ -9,7 +9,6 @@ import com.petcare.backend.repository.VaccineRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,27 +45,43 @@ public class VaccineService {
                 doses.add(newDose);
             }
         }
-
         Vaccine vaccine = new Vaccine(vaccineDTO);
         vaccine.setDoses(doses);
         return vaccineRepository.save(vaccine);
     }
 
     public Vaccine updateVaccine(Vaccine updatedVaccine) throws VaccineNotFoundException {
-        boolean thisVaccineExists = vaccineRepository.existsById(updatedVaccine.getId());
-        if (thisVaccineExists) {
-            updatedVaccine.setDoses(this.addUnsavedDoses(updatedVaccine));
-            return vaccineRepository.save(updatedVaccine);
+        Optional<Vaccine> vaccineOptional = vaccineRepository.findById(updatedVaccine.getId());
+
+        if (vaccineOptional.isPresent()) {
+            Vaccine vaccine = vaccineOptional.get();
+            vaccine.updateVaccine(updatedVaccine);
+//            List<Dose> updatedDoses = updateDoses(updatedVaccine);
+            List<Dose> updatedDoses = updatedVaccine.getDoses();
+            vaccine.updateDoses(updatedDoses);
+            vaccineRepository.save(vaccine);
+
+            return vaccine;
         } else {
             throw new VaccineNotFoundException();
         }
     }
 
+//    private List<Dose> updateDoses(Vaccine updatedVaccine) {
+//        List<Dose> doses = new ArrayList<>();
+//        if (updatedVaccine.getDoses().size() > 0) {
+//            for (Dose dose : updatedVaccine.getDoses()) {
+//                Dose newDose = doseService.updateDose(dose);
+//                doses.add(newDose);
+//            }
+//        } return doses;
+//    }
+
     private List<Dose> addUnsavedDoses(Vaccine vaccine) {
         List<Dose> updatedDoses = new ArrayList<>();
 
         for (Dose dose : vaccine.getDoses()) {
-            if(dose.getId() == null) {
+            if (dose.getId() == null) {
                 Dose newDose = doseService.addNewDose(new DoseDTO(dose));
                 updatedDoses.add(newDose);
             } else {

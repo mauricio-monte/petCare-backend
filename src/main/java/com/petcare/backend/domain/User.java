@@ -47,7 +47,6 @@ public class User {
         if (userDTO.getName() != null) this.name = userDTO.getName();
         if (userDTO.getUsername() != null) this.username = userDTO.getUsername();
         if (userDTO.getEmail() != null) this.email = userDTO.getEmail();
-        if (userDTO.getPets() != null) this.pets = userDTO.getPets();
     }
 
     @Override
