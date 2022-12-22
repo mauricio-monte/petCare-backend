@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 
 import com.petcare.backend.exception.PetNotFoundException;
+import com.petcare.backend.exception.UserNotFoundException;
+import com.petcare.backend.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +31,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PetController {
     private PetService petService;
+    private UserService userService;
 
     @GetMapping
     public ResponseEntity<List<Pet>> getPets() {
@@ -47,8 +50,8 @@ public class PetController {
     @PostMapping
     public ResponseEntity<Pet> createNewPet(@RequestBody PetDTO petDTO) {
         try {
-            return new ResponseEntity<>(petService.addNewPet(petDTO), HttpStatus.OK);
-        } catch (EntityNotFoundException petException) {
+            return new ResponseEntity<>(userService.addPetToUser(petDTO), HttpStatus.OK);
+        } catch (UserNotFoundException petException) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, petException.getMessage(), petException);
         }
     }

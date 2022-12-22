@@ -5,6 +5,6 @@ import com.petcare.backend.util.StatusConstants;
 public class VaccineNotFoundException extends Exception {
 
     public VaccineNotFoundException() {
-        super(StatusConstants.USER_NOT_FOUND_STATUS);
+        super(StatusConstants.VACCINE_NOT_FOUND_STATUS);
     }
 }

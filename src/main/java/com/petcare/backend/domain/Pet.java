@@ -1,14 +1,13 @@
 package com.petcare.backend.domain;
 
-import java.util.List;
-
-import javax.persistence.*;
-
 import com.petcare.backend.dto.PetDTO;
-
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "pets")
@@ -21,6 +20,10 @@ public class Pet {
     @SequenceGenerator(name = "pet_sequence", sequenceName = "pet_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pet_sequence")
     private Long id;
+
+    @Column
+    @NotNull
+    private Long userId;
 
     @Column(nullable = false)
     private String name;
@@ -40,10 +43,11 @@ public class Pet {
     @Column
     private String allergies;
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Vaccine> vaccines;
 
     public Pet(PetDTO petDTO) {
+        this.userId = petDTO.getUserId();
         this.name = petDTO.getName();
         this.age = petDTO.getAge();
         this.weight = petDTO.getWeight();
@@ -59,5 +63,9 @@ public class Pet {
         if (pet.getSpecies() != null) this.species = pet.getSpecies();
         if (pet.getRace() != null) this.race = pet.getRace();
         if (pet.getAllergies() != null) this.allergies = pet.getAllergies();
+    }
+
+    public void addVaccine(Vaccine vaccine) {
+        this.vaccines.add(vaccine);
     }
 }

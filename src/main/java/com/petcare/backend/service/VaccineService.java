@@ -36,16 +36,18 @@ public class VaccineService {
     }
 
     public Vaccine addNewVaccine(VaccineDTO vaccineDTO) {
-        boolean thisVaccineHasADose = vaccineDTO.getDoses().size() > 0;
+        boolean thisVaccineHasADose = vaccineDTO.vaccineHasDose();
         List<Dose> doses = new ArrayList<>();
+        Vaccine vaccine = new Vaccine(vaccineDTO);
+        vaccineRepository.save(vaccine);
 
         if (thisVaccineHasADose) {
             for (DoseDTO dose : vaccineDTO.getDoses()) {
+                dose.setVaccineId(vaccine.getId());
                 Dose newDose = doseService.addNewDose(dose);
                 doses.add(newDose);
             }
         }
-        Vaccine vaccine = new Vaccine(vaccineDTO);
         vaccine.setDoses(doses);
         return vaccineRepository.save(vaccine);
     }
@@ -58,12 +60,19 @@ public class VaccineService {
             vaccine.updateVaccine(updatedVaccine);
 //            List<Dose> updatedDoses = updateDoses(updatedVaccine);
             List<Dose> updatedDoses = updatedVaccine.getDoses();
+            setVaccinesIds(updatedVaccine.getId(), updatedDoses);
             vaccine.updateDoses(updatedDoses);
             vaccineRepository.save(vaccine);
 
             return vaccine;
         } else {
             throw new VaccineNotFoundException();
+        }
+    }
+
+    private void setVaccinesIds(Long vaccinesId, List<Dose> updatedDoses) {
+        for (Dose dose: updatedDoses) {
+            dose.setVaccineId(vaccinesId);
         }
     }
 
