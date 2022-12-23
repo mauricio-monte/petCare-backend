@@ -1,6 +1,8 @@
 package com.petcare.backend.service;
 
+import com.petcare.backend.domain.Pet;
 import com.petcare.backend.domain.User;
+import com.petcare.backend.dto.PetDTO;
 import com.petcare.backend.dto.UserDTO;
 import com.petcare.backend.dto.user.LoginDTO;
 import com.petcare.backend.dto.user.LoginReturnDTO;
@@ -11,6 +13,7 @@ import com.petcare.backend.exception.UserNotFoundException;
 import com.petcare.backend.exception.UsernameAlreadyRegisteredException;
 import com.petcare.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PetService petService;
 
     public List<User> getUsers() {
         return userRepository.findAll();
@@ -36,6 +40,20 @@ public class UserService {
         User newUser = userRepository.save(new User(userDTO.getName(), userDTO.getUsername(), userDTO.getEmail(), passwordHash));
 
         return new LoginReturnDTO(newUser);
+    }
+
+    public Pet addPetToUser(PetDTO petDTO) throws UserNotFoundException {
+        Optional<User> userOptional = userRepository.findById(petDTO.getUserId());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            Pet pet = this.petService.addNewPet(petDTO);
+            user.addPet(pet);
+            userRepository.save(user);
+            return pet;
+        } else {
+            throw new UserNotFoundException();
+        }
     }
 
     public LoginReturnDTO login(LoginDTO loginCredentials) throws Exception {

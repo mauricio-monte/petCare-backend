@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.petcare.backend.domain.Pet;
 
+import java.util.List;
+
 @Repository
 public interface PetRepository extends JpaRepository<Pet, Long> {
-
+    List<Pet> findAllByUserId(Long userId);
 }
