@@ -2,7 +2,9 @@ package com.petcare.backend.controller;
 
 import com.petcare.backend.domain.Vaccine;
 import com.petcare.backend.dto.VaccineDTO;
+import com.petcare.backend.exception.PetNotFoundException;
 import com.petcare.backend.exception.VaccineNotFoundException;
+import com.petcare.backend.service.PetService;
 import com.petcare.backend.service.VaccineService;
 import com.petcare.backend.util.UrlConstants;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.List;
 public class VaccineController {
 
     private VaccineService vaccineService;
+    private PetService petService;
 
 
     @GetMapping
@@ -38,7 +41,11 @@ public class VaccineController {
 
     @PostMapping
     public ResponseEntity<Vaccine> createNewVaccine(@RequestBody VaccineDTO vaccineDTO) {
-        return new ResponseEntity<>(vaccineService.addNewVaccine(vaccineDTO), HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(petService.addVaccineToPet(vaccineDTO), HttpStatus.CREATED);
+        } catch (PetNotFoundException petNotFoundException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, petNotFoundException.getMessage(), petNotFoundException);
+        }
     }
 
     @PutMapping

@@ -49,6 +49,10 @@ public class User {
         if (userDTO.getEmail() != null) this.email = userDTO.getEmail();
     }
 
+    public void addPet(Pet pet) {
+        this.pets.add(pet);
+    }
+
     @Override
     public String toString() {
         return "User{" +

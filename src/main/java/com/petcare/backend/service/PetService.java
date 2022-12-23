@@ -1,10 +1,12 @@
 package com.petcare.backend.service;
 
 import com.petcare.backend.domain.Pet;
+import com.petcare.backend.domain.User;
 import com.petcare.backend.domain.Vaccine;
 import com.petcare.backend.dto.PetDTO;
 import com.petcare.backend.dto.VaccineDTO;
 import com.petcare.backend.exception.PetNotFoundException;
+import com.petcare.backend.exception.UserNotFoundException;
 import com.petcare.backend.repository.PetRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,20 +36,7 @@ public class PetService {
     }
 
     public Pet addNewPet(PetDTO petDTO) {
-        boolean thisAnimalHasAVaccine = petDTO.getVaccines().size() > 0;
-
-        List<Vaccine> vaccines = new ArrayList<>();
         Pet pet = createPet(petDTO);
-
-        if (thisAnimalHasAVaccine) {
-            for (VaccineDTO vaccineDTO : petDTO.getVaccines()) {
-                vaccineDTO.setPetId(pet.getId());
-                Vaccine newVaccine = vaccineService.addNewVaccine(vaccineDTO);
-                vaccines.add(newVaccine);
-            }
-        }
-        pet.setVaccines(vaccines);
-
         return petRepository.save(pet);
     }
 
@@ -77,6 +66,20 @@ public class PetService {
         }
 
         return updatedVaccines;
+    }
+
+    public Vaccine addVaccineToPet(VaccineDTO vaccineDTO) throws PetNotFoundException {
+        Optional<Pet> petOptional = petRepository.findById(vaccineDTO.getPetId());
+
+        if (petOptional.isPresent()) {
+            Pet pet = petOptional.get();
+            Vaccine vaccine = this.vaccineService.addNewVaccine(vaccineDTO);
+            pet.addVaccine(vaccine);
+            petRepository.save(pet);
+            return vaccine;
+        } else {
+            throw new PetNotFoundException();
+        }
     }
 
     public void deletePet(Long petId) throws PetNotFoundException {

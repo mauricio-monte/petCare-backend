@@ -35,4 +35,8 @@ public class VaccineDTO {
 
         this.doses = doses;
     }
+
+    public boolean vaccineHasDose() {
+        return !(this.doses == null || this.doses.isEmpty());
+    }
 }
