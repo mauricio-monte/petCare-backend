@@ -26,8 +26,8 @@ public class VaccineController {
 
 
     @GetMapping
-    public ResponseEntity<List<Vaccine>> getVaccines() {
-        return new ResponseEntity<>(vaccineService.getVaccines(), HttpStatus.OK);
+    public ResponseEntity<List<Vaccine>> getVaccines(@RequestParam(required = false) Long petId) {
+        return new ResponseEntity<>(vaccineService.getVaccines(petId), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

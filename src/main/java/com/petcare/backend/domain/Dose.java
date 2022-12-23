@@ -32,7 +32,6 @@ public class Dose {
 
     @Column
     @NotNull
-    @JsonProperty("vaccine_id")
     private Long vaccineId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")

@@ -21,8 +21,12 @@ public class PetService {
     private PetRepository petRepository;
     private VaccineService vaccineService;
 
-    public List<Pet> getPets() {
-        return petRepository.findAll();
+    public List<Pet> getPets(Long userId) {
+        if (userId != null) {
+            return petRepository.findAllByUserId(userId);
+        } else {
+            return petRepository.findAll();
+        }
     }
 
     public Pet getPetById(Long petId) throws PetNotFoundException {

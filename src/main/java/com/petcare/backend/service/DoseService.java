@@ -22,7 +22,11 @@ public class DoseService {
         return this.doseRepository.save(dose);
     }
 
-    public List<Dose> getDoses() {
-        return doseRepository.findAll();
+    public List<Dose> getDoses(Long vaccineId) {
+        if (vaccineId != null) {
+            return doseRepository.findAllByVaccineId(vaccineId);
+        } else {
+            return doseRepository.findAll();
+        }
     }
 }

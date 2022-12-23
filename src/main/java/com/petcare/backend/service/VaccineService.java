@@ -20,8 +20,12 @@ public class VaccineService {
     private final VaccineRepository vaccineRepository;
     private final DoseService doseService;
 
-    public List<Vaccine> getVaccines() {
-        return vaccineRepository.findAll();
+    public List<Vaccine> getVaccines(Long petId) {
+        if (petId != null) {
+            return vaccineRepository.findAllByPetId(petId);
+        } else {
+            return vaccineRepository.findAll();
+        }
     }
 
     public Vaccine getVaccineById(Long vaccineId) throws VaccineNotFoundException {
