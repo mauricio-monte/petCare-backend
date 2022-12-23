@@ -16,5 +16,4 @@ public class UserDTO {
     private String name;
     private String username;
     private String email;
-    private List<Pet> pets;
 }
