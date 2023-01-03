@@ -1,17 +1,15 @@
 package com.petcare.backend.service;
 
 import com.petcare.backend.domain.Pet;
-import com.petcare.backend.domain.User;
 import com.petcare.backend.domain.Vaccine;
-import com.petcare.backend.dto.PetDTO;
-import com.petcare.backend.dto.VaccineDTO;
+import com.petcare.backend.dto.pet.CreatePetDTO;
+import com.petcare.backend.dto.vaccine.CreateVaccineDTO;
+import com.petcare.backend.dto.pet.UpdatePetDTO;
 import com.petcare.backend.exception.PetNotFoundException;
-import com.petcare.backend.exception.UserNotFoundException;
 import com.petcare.backend.repository.PetRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,48 +37,19 @@ public class PetService {
         }
     }
 
-    public Pet addNewPet(PetDTO petDTO) {
-        Pet pet = createPet(petDTO);
+    public Pet addNewPet(CreatePetDTO createPetDTO) {
+        Pet pet = new Pet(createPetDTO);
         return petRepository.save(pet);
     }
 
-    public Pet updatePet(Pet updatedPet) throws PetNotFoundException {
-        Optional<Pet> petOptional = petRepository.findById(updatedPet.getId());
+    public Pet updatePet(Long petId, UpdatePetDTO updatedPet) throws PetNotFoundException {
+        Optional<Pet> petOptional = petRepository.findById(petId);
 
         if (petOptional.isPresent()) {
             Pet pet = petOptional.get();
             pet.updatePet(updatedPet);
             petRepository.save(pet);
             return pet;
-        } else {
-            throw new PetNotFoundException();
-        }
-    }
-
-    private List<Vaccine> addUnsavedVaccines(Pet pet) {
-        List<Vaccine> updatedVaccines = new ArrayList<>();
-
-        for (Vaccine vaccine : pet.getVaccines()) {
-            if (vaccine.getId() == null) {
-                Vaccine newVaccine = vaccineService.addNewVaccine(new VaccineDTO(vaccine));
-                updatedVaccines.add(newVaccine);
-            } else {
-                updatedVaccines.add(vaccine);
-            }
-        }
-
-        return updatedVaccines;
-    }
-
-    public Vaccine addVaccineToPet(VaccineDTO vaccineDTO) throws PetNotFoundException {
-        Optional<Pet> petOptional = petRepository.findById(vaccineDTO.getPetId());
-
-        if (petOptional.isPresent()) {
-            Pet pet = petOptional.get();
-            Vaccine vaccine = this.vaccineService.addNewVaccine(vaccineDTO);
-            pet.addVaccine(vaccine);
-            petRepository.save(pet);
-            return vaccine;
         } else {
             throw new PetNotFoundException();
         }
@@ -96,10 +65,17 @@ public class PetService {
         }
     }
 
-    private Pet createPet(PetDTO petDTO) {
-        Pet pet = new Pet(petDTO);
-        petRepository.save(pet);
-        return pet;
-    }
+    public Vaccine addVaccineToPet(CreateVaccineDTO vaccineDTO) throws PetNotFoundException {
+        Optional<Pet> petOptional = petRepository.findById(vaccineDTO.getPetId());
 
+        if (petOptional.isPresent()) {
+            Pet pet = petOptional.get();
+            Vaccine vaccine = this.vaccineService.addNewVaccine(vaccineDTO);
+            pet.addVaccine(vaccine);
+            petRepository.save(pet);
+            return vaccine;
+        } else {
+            throw new PetNotFoundException();
+        }
+    }
 }

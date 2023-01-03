@@ -1,8 +1,7 @@
 package com.petcare.backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.petcare.backend.dto.DoseDTO;
+import com.petcare.backend.dto.dose.CreateDoseDTO;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,20 +29,15 @@ public class Dose {
     )
     private Long id;
 
-    @Column
-    @NotNull
-    private Long vaccineId;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
     @Temporal(TemporalType.DATE)
     private Date date;
 
     private boolean applied;
 
-    public Dose(DoseDTO doseDTO) {
-        this.vaccineId = doseDTO.getVaccineId();
-        this.date = doseDTO.getDate();
-        this.applied = doseDTO.isApplied();
+    public Dose(CreateDoseDTO createDoseDTO) {
+        this.date = createDoseDTO.getDate();
+        this.applied = createDoseDTO.isApplied();
     }
 
     public boolean equals(Object o) {

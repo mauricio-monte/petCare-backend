@@ -1,6 +1,7 @@
 package com.petcare.backend.domain;
 
-import com.petcare.backend.dto.PetDTO;
+import com.petcare.backend.dto.pet.CreatePetDTO;
+import com.petcare.backend.dto.pet.UpdatePetDTO;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +29,7 @@ public class Pet {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private Integer age;
 
     @Column
@@ -46,17 +47,17 @@ public class Pet {
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Vaccine> vaccines;
 
-    public Pet(PetDTO petDTO) {
-        this.userId = petDTO.getUserId();
-        this.name = petDTO.getName();
-        this.age = petDTO.getAge();
-        this.weight = petDTO.getWeight();
-        this.species = petDTO.getSpecies();
-        this.race = petDTO.getRace();
-        this.allergies = petDTO.getAllergies();
+    public Pet(CreatePetDTO createPetDTO) {
+        this.userId = createPetDTO.getUserId();
+        this.name = createPetDTO.getName();
+        this.age = createPetDTO.getAge();
+        this.weight = createPetDTO.getWeight();
+        this.species = createPetDTO.getSpecies();
+        this.race = createPetDTO.getRace();
+        this.allergies = createPetDTO.getAllergies();
     }
 
-    public void updatePet(Pet pet) {
+    public void updatePet(UpdatePetDTO pet) {
         if (pet.getName() != null) this.name = pet.getName();
         if (pet.getAge() != null) this.age = pet.getAge();
         if (pet.getWeight() != null) this.weight = pet.getWeight();

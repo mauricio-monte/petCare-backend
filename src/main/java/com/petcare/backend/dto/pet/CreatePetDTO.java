@@ -1,10 +1,6 @@
-package com.petcare.backend.dto;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.petcare.backend.dto.pet;
 
 import com.petcare.backend.domain.Pet;
-import com.petcare.backend.domain.Vaccine;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,17 +9,16 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PetDTO {
-
-    private Long userId;
+public class CreatePetDTO {
     private String name;
-    private int age;
-    private float weight;
+    private Integer age;
+    private Float weight;
     private String species;
     private String race;
     private String allergies;
+    private Long userId;
 
-    public PetDTO(Pet pet) {
+    public CreatePetDTO(Pet pet) {
         this.name = pet.getName();
         this.age = pet.getAge();
         this.weight = pet.getWeight();
@@ -31,5 +26,4 @@ public class PetDTO {
         this.race = pet.getRace();
         this.allergies = pet.getAllergies();
     }
-
 }
