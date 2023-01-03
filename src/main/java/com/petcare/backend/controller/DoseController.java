@@ -24,8 +24,8 @@ public class DoseController {
     private final VaccineService vaccineService;
 
     @GetMapping
-    public ResponseEntity<List<Dose>> getDoses(@RequestParam(required = false) Long vaccineId) {
-        return new ResponseEntity<>(doseService.getDoses(vaccineId), HttpStatus.OK);
+    public ResponseEntity<List<Dose>> getDoses() {
+        return new ResponseEntity<>(doseService.getDoses(), HttpStatus.OK);
     }
 
 }

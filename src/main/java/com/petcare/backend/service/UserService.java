@@ -2,18 +2,17 @@ package com.petcare.backend.service;
 
 import com.petcare.backend.domain.Pet;
 import com.petcare.backend.domain.User;
-import com.petcare.backend.dto.PetDTO;
-import com.petcare.backend.dto.UserDTO;
+import com.petcare.backend.dto.pet.CreatePetDTO;
 import com.petcare.backend.dto.user.LoginDTO;
 import com.petcare.backend.dto.user.LoginReturnDTO;
-import com.petcare.backend.dto.user.PostDTO;
+import com.petcare.backend.dto.user.CreateUserDTO;
+import com.petcare.backend.dto.user.UpdateUserDTO;
 import com.petcare.backend.exception.EmailAlreadyRegisteredException;
 import com.petcare.backend.exception.LoginFailedException;
 import com.petcare.backend.exception.UserNotFoundException;
 import com.petcare.backend.exception.UsernameAlreadyRegisteredException;
 import com.petcare.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public LoginReturnDTO addNewUser(PostDTO userDTO) throws EmailAlreadyRegisteredException, UsernameAlreadyRegisteredException {
+    public LoginReturnDTO addNewUser(CreateUserDTO userDTO) throws EmailAlreadyRegisteredException, UsernameAlreadyRegisteredException {
         validateEmail(userDTO.getEmail());
         validateUsername(userDTO.getUsername());
 
@@ -42,12 +41,12 @@ public class UserService {
         return new LoginReturnDTO(newUser);
     }
 
-    public Pet addPetToUser(PetDTO petDTO) throws UserNotFoundException {
-        Optional<User> userOptional = userRepository.findById(petDTO.getUserId());
+    public Pet addPetToUser(CreatePetDTO createPetDTO) throws UserNotFoundException {
+        Optional<User> userOptional = userRepository.findById(createPetDTO.getUserId());
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            Pet pet = this.petService.addNewPet(petDTO);
+            Pet pet = this.petService.addNewPet(createPetDTO);
             user.addPet(pet);
             userRepository.save(user);
             return pet;
@@ -68,12 +67,12 @@ public class UserService {
         }
     }
 
-    public LoginReturnDTO updateUser(UserDTO userDTO) throws UserNotFoundException {
-        Optional<User> userOptional = userRepository.findById(userDTO.getId());
+    public LoginReturnDTO updateUser(Long userId, UpdateUserDTO updateUserDTO) throws UserNotFoundException {
+        Optional<User> userOptional = userRepository.findById(userId);
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            user.updateUser(userDTO);
+            user.updateUser(updateUserDTO);
             return new LoginReturnDTO(userRepository.save(user));
         } else {
             throw new UserNotFoundException();

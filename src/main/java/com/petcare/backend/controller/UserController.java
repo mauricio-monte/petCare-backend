@@ -1,10 +1,10 @@
 package com.petcare.backend.controller;
 
 import com.petcare.backend.domain.User;
-import com.petcare.backend.dto.UserDTO;
 import com.petcare.backend.dto.user.LoginDTO;
 import com.petcare.backend.dto.user.LoginReturnDTO;
-import com.petcare.backend.dto.user.PostDTO;
+import com.petcare.backend.dto.user.CreateUserDTO;
+import com.petcare.backend.dto.user.UpdateUserDTO;
 import com.petcare.backend.exception.EmailAlreadyRegisteredException;
 import com.petcare.backend.exception.LoginFailedException;
 import com.petcare.backend.exception.UserNotFoundException;
@@ -31,7 +31,7 @@ public class UserController {
         return userService.getUsers();
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<LoginReturnDTO> login(@RequestBody LoginDTO loginCredentials) throws Exception {
         try {
             LoginReturnDTO result = userService.login(loginCredentials);
@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<LoginReturnDTO> createNewUser(@RequestBody PostDTO postDTO) {
+    public ResponseEntity<LoginReturnDTO> createNewUser(@RequestBody CreateUserDTO postDTO) {
         try {
             return new ResponseEntity<>(userService.addNewUser(postDTO), HttpStatus.CREATED);
         } catch (EmailAlreadyRegisteredException | UsernameAlreadyRegisteredException conflictException) {
@@ -51,10 +51,10 @@ public class UserController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<LoginReturnDTO> updateUser(@RequestBody UserDTO userDTO) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<LoginReturnDTO> updateUser(@PathVariable("id") Long userId, @RequestBody UpdateUserDTO userDTO) {
         try {
-            return new ResponseEntity<>(userService.updateUser(userDTO), HttpStatus.OK);
+            return new ResponseEntity<>(userService.updateUser(userId, userDTO), HttpStatus.OK);
         } catch (UserNotFoundException updateException) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, updateException.getMessage(), updateException);
         }

@@ -1,6 +1,7 @@
 package com.petcare.backend.domain;
 
-import com.petcare.backend.dto.VaccineDTO;
+import com.petcare.backend.dto.vaccine.CreateVaccineDTO;
+import com.petcare.backend.dto.vaccine.UpdateVaccineDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,14 +43,14 @@ public class Vaccine {
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Dose> doses;
 
-    public Vaccine(VaccineDTO vaccineDTO) {
+    public Vaccine(CreateVaccineDTO vaccineDTO) {
         this.petId = vaccineDTO.getPetId();
         this.description = vaccineDTO.getDescription();
         this.veterinaryClinic = vaccineDTO.getVeterinaryClinic();
         this.singleDose = vaccineDTO.getSingleDose();
     }
 
-    public void updateVaccine(Vaccine updatedVaccine) {
+    public void updateVaccine(UpdateVaccineDTO updatedVaccine) {
         if (updatedVaccine.getDescription() != null) this.description = updatedVaccine.getDescription();
         if (updatedVaccine.getVeterinaryClinic() != null) this.veterinaryClinic = updatedVaccine.getVeterinaryClinic();
         if (updatedVaccine.getSingleDose() != null) this.singleDose = updatedVaccine.getSingleDose();
