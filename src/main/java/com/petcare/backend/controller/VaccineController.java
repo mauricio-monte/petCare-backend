@@ -1,7 +1,8 @@
 package com.petcare.backend.controller;
 
 import com.petcare.backend.domain.Vaccine;
-import com.petcare.backend.dto.VaccineDTO;
+import com.petcare.backend.dto.vaccine.CreateVaccineDTO;
+import com.petcare.backend.dto.vaccine.UpdateVaccineDTO;
 import com.petcare.backend.exception.PetNotFoundException;
 import com.petcare.backend.exception.VaccineNotFoundException;
 import com.petcare.backend.service.PetService;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
@@ -40,18 +40,18 @@ public class VaccineController {
     }
 
     @PostMapping
-    public ResponseEntity<Vaccine> createNewVaccine(@RequestBody VaccineDTO vaccineDTO) {
+    public ResponseEntity<Vaccine> createNewVaccine(@RequestBody CreateVaccineDTO createVaccineDTO) {
         try {
-            return new ResponseEntity<>(petService.addVaccineToPet(vaccineDTO), HttpStatus.CREATED);
+            return new ResponseEntity<>(petService.addVaccineToPet(createVaccineDTO), HttpStatus.CREATED);
         } catch (PetNotFoundException petNotFoundException) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, petNotFoundException.getMessage(), petNotFoundException);
         }
     }
 
-    @PutMapping
-    public ResponseEntity<Vaccine> updateVaccine(@RequestBody Vaccine vaccine) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<Vaccine> updateVaccine(@PathVariable("id") Long vaccineId, @RequestBody UpdateVaccineDTO updateVaccineDTO) {
         try {
-            return new ResponseEntity<>(vaccineService.updateVaccine(vaccine), HttpStatus.OK);
+            return new ResponseEntity<>(vaccineService.updateVaccine(vaccineId, updateVaccineDTO), HttpStatus.OK);
         } catch (VaccineNotFoundException vaccineException) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, vaccineException.getMessage(), vaccineException);
         }

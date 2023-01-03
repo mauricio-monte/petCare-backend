@@ -1,10 +1,8 @@
 package com.petcare.backend.controller;
 
 import java.util.List;
-import java.util.Optional;
 
-import javax.persistence.EntityNotFoundException;
-
+import com.petcare.backend.dto.pet.UpdatePetDTO;
 import com.petcare.backend.exception.PetNotFoundException;
 import com.petcare.backend.exception.UserNotFoundException;
 import com.petcare.backend.service.UserService;
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.petcare.backend.domain.Pet;
-import com.petcare.backend.dto.PetDTO;
+import com.petcare.backend.dto.pet.CreatePetDTO;
 import com.petcare.backend.service.PetService;
 import com.petcare.backend.util.UrlConstants;
 
@@ -42,18 +40,18 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<Pet> createNewPet(@RequestBody PetDTO petDTO) {
+    public ResponseEntity<Pet> createNewPet(@RequestBody CreatePetDTO createPetDTO) {
         try {
-            return new ResponseEntity<>(userService.addPetToUser(petDTO), HttpStatus.OK);
+            return new ResponseEntity<>(userService.addPetToUser(createPetDTO), HttpStatus.OK);
         } catch (UserNotFoundException petException) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, petException.getMessage(), petException);
         }
     }
 
-    @PutMapping
-    public ResponseEntity<Pet> updatePet(@RequestBody Pet pet) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<Pet> updatePet(@PathVariable("id") Long petId, @RequestBody UpdatePetDTO pet) {
         try {
-            return new ResponseEntity<>(petService.updatePet(pet), HttpStatus.OK);
+            return new ResponseEntity<>(petService.updatePet(petId, pet), HttpStatus.OK);
         } catch (PetNotFoundException petException) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, petException.getMessage(), petException);
         }

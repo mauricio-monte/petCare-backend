@@ -1,6 +1,6 @@
 package com.petcare.backend.domain;
 
-import com.petcare.backend.dto.UserDTO;
+import com.petcare.backend.dto.user.UpdateUserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,7 +43,7 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    public void updateUser(UserDTO userDTO) {
+    public void updateUser(UpdateUserDTO userDTO) {
         if (userDTO.getName() != null) this.name = userDTO.getName();
         if (userDTO.getUsername() != null) this.username = userDTO.getUsername();
         if (userDTO.getEmail() != null) this.email = userDTO.getEmail();

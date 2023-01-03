@@ -2,8 +2,9 @@ package com.petcare.backend.service;
 
 import com.petcare.backend.domain.Dose;
 import com.petcare.backend.domain.Vaccine;
-import com.petcare.backend.dto.DoseDTO;
-import com.petcare.backend.dto.VaccineDTO;
+import com.petcare.backend.dto.dose.CreateDoseDTO;
+import com.petcare.backend.dto.vaccine.CreateVaccineDTO;
+import com.petcare.backend.dto.vaccine.UpdateVaccineDTO;
 import com.petcare.backend.exception.VaccineNotFoundException;
 import com.petcare.backend.repository.VaccineRepository;
 import lombok.AllArgsConstructor;
@@ -36,18 +37,16 @@ public class VaccineService {
         } else {
             throw new VaccineNotFoundException();
         }
-
     }
 
-    public Vaccine addNewVaccine(VaccineDTO vaccineDTO) {
-        boolean thisVaccineHasADose = vaccineDTO.vaccineHasDose();
+    public Vaccine addNewVaccine(CreateVaccineDTO createVaccineDTO) {
+        boolean thisVaccineHasADose = createVaccineDTO.vaccineHasDose();
         List<Dose> doses = new ArrayList<>();
-        Vaccine vaccine = new Vaccine(vaccineDTO);
+        Vaccine vaccine = new Vaccine(createVaccineDTO);
         vaccineRepository.save(vaccine);
 
         if (thisVaccineHasADose) {
-            for (DoseDTO dose : vaccineDTO.getDoses()) {
-                dose.setVaccineId(vaccine.getId());
+            for (CreateDoseDTO dose : createVaccineDTO.getDoses()) {
                 Dose newDose = doseService.addNewDose(dose);
                 doses.add(newDose);
             }
@@ -56,53 +55,17 @@ public class VaccineService {
         return vaccineRepository.save(vaccine);
     }
 
-    public Vaccine updateVaccine(Vaccine updatedVaccine) throws VaccineNotFoundException {
-        Optional<Vaccine> vaccineOptional = vaccineRepository.findById(updatedVaccine.getId());
+    public Vaccine updateVaccine(Long vaccineId, UpdateVaccineDTO updateVaccineDTO) throws VaccineNotFoundException {
+        Optional<Vaccine> vaccineOptional = vaccineRepository.findById(vaccineId);
 
         if (vaccineOptional.isPresent()) {
             Vaccine vaccine = vaccineOptional.get();
-            vaccine.updateVaccine(updatedVaccine);
-//            List<Dose> updatedDoses = updateDoses(updatedVaccine);
-            List<Dose> updatedDoses = updatedVaccine.getDoses();
-            setVaccinesIds(updatedVaccine.getId(), updatedDoses);
-            vaccine.updateDoses(updatedDoses);
+            vaccine.updateVaccine(updateVaccineDTO);
             vaccineRepository.save(vaccine);
-
             return vaccine;
         } else {
             throw new VaccineNotFoundException();
         }
-    }
-
-    private void setVaccinesIds(Long vaccinesId, List<Dose> updatedDoses) {
-        for (Dose dose: updatedDoses) {
-            dose.setVaccineId(vaccinesId);
-        }
-    }
-
-//    private List<Dose> updateDoses(Vaccine updatedVaccine) {
-//        List<Dose> doses = new ArrayList<>();
-//        if (updatedVaccine.getDoses().size() > 0) {
-//            for (Dose dose : updatedVaccine.getDoses()) {
-//                Dose newDose = doseService.updateDose(dose);
-//                doses.add(newDose);
-//            }
-//        } return doses;
-//    }
-
-    private List<Dose> addUnsavedDoses(Vaccine vaccine) {
-        List<Dose> updatedDoses = new ArrayList<>();
-
-        for (Dose dose : vaccine.getDoses()) {
-            if (dose.getId() == null) {
-                Dose newDose = doseService.addNewDose(new DoseDTO(dose));
-                updatedDoses.add(newDose);
-            } else {
-                updatedDoses.add(dose);
-            }
-        }
-
-        return updatedDoses;
     }
 
     public void deleteVaccine(Long vaccineId) throws VaccineNotFoundException {

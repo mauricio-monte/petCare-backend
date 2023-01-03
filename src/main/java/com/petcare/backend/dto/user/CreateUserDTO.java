@@ -3,7 +3,7 @@ package com.petcare.backend.dto.user;
 import lombok.Data;
 
 @Data
-public class PostDTO {
+public class CreateUserDTO {
     private String name;
     private String username;
     private String email;
