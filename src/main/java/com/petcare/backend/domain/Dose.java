@@ -1,8 +1,7 @@
 package com.petcare.backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.petcare.backend.dto.dose.CreateDoseDTO;
-import com.sun.istack.NotNull;
+import com.petcare.backend.dto.dose.CreateDoseFromVaccineDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,9 +34,9 @@ public class Dose {
 
     private boolean applied;
 
-    public Dose(CreateDoseDTO createDoseDTO) {
-        this.date = createDoseDTO.getDate();
-        this.applied = createDoseDTO.isApplied();
+    public Dose(CreateDoseFromVaccineDTO createDoseFromVaccineDTO) {
+        this.date = createDoseFromVaccineDTO.getDate();
+        this.applied = createDoseFromVaccineDTO.isApplied();
     }
 
     public boolean equals(Object o) {
