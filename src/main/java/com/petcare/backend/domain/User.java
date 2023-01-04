@@ -9,7 +9,12 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(
+    name = "users",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "user_email_unique", columnNames = "email")
+    }
+)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -24,28 +29,29 @@ public class User {
             strategy = GenerationType.SEQUENCE,
             generator = "user_sequence"
     )
+    @Column(name = "id", updatable = false)
     private Long id;
-    @Column
+
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column
-    private String username;
-    @Column
+
+    @Column(name = "email", nullable = false)
     private String email;
-    @Column
+
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
     @OneToMany(orphanRemoval = true)
     private List<Pet> pets;
-    public User(String name, String username, String email, String passwordHash) {
+
+    public User(String name, String email, String passwordHash) {
         this.name = name;
-        this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;
     }
 
     public void updateUser(UpdateUserDTO userDTO) {
         if (userDTO.getName() != null) this.name = userDTO.getName();
-        if (userDTO.getUsername() != null) this.username = userDTO.getUsername();
         if (userDTO.getEmail() != null) this.email = userDTO.getEmail();
     }
 
@@ -58,7 +64,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
                 '}';

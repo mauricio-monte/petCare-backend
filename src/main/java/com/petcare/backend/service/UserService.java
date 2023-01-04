@@ -31,12 +31,11 @@ public class UserService {
 
     public LoginReturnDTO addNewUser(CreateUserDTO userDTO) throws EmailAlreadyRegisteredException, UsernameAlreadyRegisteredException {
         validateEmail(userDTO.getEmail());
-        validateUsername(userDTO.getUsername());
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(4);
         String passwordHash = encoder.encode(userDTO.getPassword());
 
-        User newUser = userRepository.save(new User(userDTO.getName(), userDTO.getUsername(), userDTO.getEmail(), passwordHash));
+        User newUser = userRepository.save(new User(userDTO.getName(), userDTO.getEmail(), passwordHash));
 
         return new LoginReturnDTO(newUser);
     }
@@ -56,14 +55,20 @@ public class UserService {
     }
 
     public LoginReturnDTO login(LoginDTO loginCredentials) throws Exception {
-        User user = this.getUserByUsername(loginCredentials.username);
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(4);
+        Optional<User> userOptional = this.userRepository.getUserByEmail(loginCredentials.getEmail());
 
-        if (encoder.matches(loginCredentials.password, user.getPasswordHash())) {
-            LoginReturnDTO userInfo = new LoginReturnDTO(user);
-            return userInfo;
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(4);
+            boolean userPasswordIsCorrect = encoder.matches(loginCredentials.password, user.getPasswordHash());
+
+            if (userPasswordIsCorrect) {
+                return new LoginReturnDTO(user);
+            } else {
+                throw new LoginFailedException();
+            }
         } else {
-            throw new LoginFailedException();
+            throw new UserNotFoundException();
         }
     }
 
@@ -90,22 +95,6 @@ public class UserService {
     private void validateEmail(String email) throws EmailAlreadyRegisteredException {
         if (userRepository.existsByEmail(email)) {
             throw new EmailAlreadyRegisteredException();
-        }
-    }
-
-    private void validateUsername(String username) throws UsernameAlreadyRegisteredException {
-        if (userRepository.existsByUsername(username)) {
-            throw new UsernameAlreadyRegisteredException();
-        }
-    }
-
-    private User getUserByUsername(String username) throws UserNotFoundException {
-        Optional<User> optionalUser = userRepository.findUserByUsername(username);
-
-        if (optionalUser.isPresent()) {
-            return optionalUser.get();
-        } else {
-            throw new UserNotFoundException();
         }
     }
 }

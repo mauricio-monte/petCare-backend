@@ -9,6 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateUserDTO {
     private String name;
-    private String username;
     private String email;
 }

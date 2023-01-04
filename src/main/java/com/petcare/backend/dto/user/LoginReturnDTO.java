@@ -14,7 +14,6 @@ import java.util.List;
 public class LoginReturnDTO {
     private Long id;
     private String name;
-    private String username;
     private String email;
 
     private List<Pet> pets;
@@ -22,7 +21,6 @@ public class LoginReturnDTO {
     public LoginReturnDTO(User user) {
         this.id = user.getId();
         this.name = user.getName();
-        this.username = user.getUsername();
         this.email = user.getEmail();
         this.pets = user.getPets();
     }
