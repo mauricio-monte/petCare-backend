@@ -2,7 +2,7 @@ package com.petcare.backend.service;
 
 import com.petcare.backend.domain.Dose;
 import com.petcare.backend.domain.Vaccine;
-import com.petcare.backend.dto.dose.CreateDoseDTO;
+import com.petcare.backend.dto.dose.CreateDoseFromVaccineDTO;
 import com.petcare.backend.dto.vaccine.CreateVaccineDTO;
 import com.petcare.backend.dto.vaccine.UpdateVaccineDTO;
 import com.petcare.backend.exception.VaccineNotFoundException;
@@ -46,7 +46,7 @@ public class VaccineService {
         vaccineRepository.save(vaccine);
 
         if (thisVaccineHasADose) {
-            for (CreateDoseDTO dose : createVaccineDTO.getDoses()) {
+            for (CreateDoseFromVaccineDTO dose : createVaccineDTO.getDoses()) {
                 Dose newDose = doseService.addNewDose(dose);
                 doses.add(newDose);
             }
