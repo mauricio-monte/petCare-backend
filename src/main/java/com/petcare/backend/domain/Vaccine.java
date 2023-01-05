@@ -29,7 +29,7 @@ public class Vaccine {
     @Column(name = "veterinary_clinic")
     private String veterinaryClinic;
 
-    @Column(name = "is_single_dose")
+    @Column(name = "is_single_dose", nullable = false)
     private Boolean isSingleDose = false;
 
     @JsonIgnore
