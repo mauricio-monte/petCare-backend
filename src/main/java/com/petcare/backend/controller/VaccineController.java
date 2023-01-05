@@ -23,7 +23,11 @@ public class VaccineController {
 
     @GetMapping
     public ResponseEntity<List<Vaccine>> getVaccines(@RequestParam(required = false) Long petId) {
-        return new ResponseEntity<>(vaccineService.getVaccines(petId), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(vaccineService.getVaccines(petId), HttpStatus.OK);
+        } catch (PetNotFoundException petNotFoundException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, petNotFoundException.getMessage(), petNotFoundException);
+        }
     }
 
     @GetMapping("/{id}")
