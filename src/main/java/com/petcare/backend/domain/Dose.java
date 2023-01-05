@@ -23,11 +23,12 @@ public class Dose {
     @Column(name = "id", updatable = false)
     private Long id;
 
+    @Column(name = "date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @Column(name = "is_applied")
+    @Column(name = "is_applied", nullable = false)
     private boolean isApplied = false;
 
     @JsonIgnore
