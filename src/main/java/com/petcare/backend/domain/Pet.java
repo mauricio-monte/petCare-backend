@@ -1,5 +1,6 @@
 package com.petcare.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.petcare.backend.dto.pet.CreatePetDTO;
 import com.petcare.backend.dto.pet.UpdatePetDTO;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -28,8 +30,10 @@ public class Pet {
     @Column(name = "profile_image", columnDefinition = "TEXT")
     private String profileImage;
 
-    @Column(name = "age")
-    private Integer age;
+    @Column(name = "birthdate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
+    @Temporal(TemporalType.DATE)
+    private Date birthdate;
 
     @Column(name = "weight")
     private Float weight;
@@ -53,7 +57,7 @@ public class Pet {
 
     public Pet(CreatePetDTO createPetDTO) {
         this.name = createPetDTO.getName();
-        this.age = createPetDTO.getAge();
+        this.birthdate = createPetDTO.getBirthdate();
         this.weight = createPetDTO.getWeight();
         this.species = createPetDTO.getSpecies();
         this.race = createPetDTO.getRace();
@@ -62,7 +66,7 @@ public class Pet {
 
     public void updatePet(UpdatePetDTO pet) {
         if (pet.getName() != null) this.name = pet.getName();
-        if (pet.getAge() != null) this.age = pet.getAge();
+        if (pet.getBirthdate() != null) this.birthdate = pet.getBirthdate();
         if (pet.getWeight() != null) this.weight = pet.getWeight();
         if (pet.getSpecies() != null) this.species = pet.getSpecies();
         if (pet.getRace() != null) this.race = pet.getRace();
