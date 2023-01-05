@@ -28,7 +28,7 @@ public class Dose {
     private Date date;
 
     @Column(name = "is_applied")
-    private boolean isApplied;
+    private boolean isApplied = false;
 
     @JsonIgnore
     @ManyToOne
