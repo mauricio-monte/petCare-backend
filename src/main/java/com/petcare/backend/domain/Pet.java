@@ -1,8 +1,8 @@
 package com.petcare.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.petcare.backend.dto.pet.CreatePetDTO;
 import com.petcare.backend.dto.pet.UpdatePetDTO;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,39 +16,39 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class Pet {
-
     @Id
     @SequenceGenerator(name = "pet_sequence", sequenceName = "pet_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pet_sequence")
+    @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column
-    @NotNull
-    private Long userId;
-
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column
+    @Column(name = "age")
     private Integer age;
 
-    @Column
+    @Column(name = "weight")
     private Float weight;
 
-    @Column
+    @Column(name = "species")
     private String species;
 
-    @Column
+    @Column(name = "race")
     private String race;
 
-    @Column
+    @Column(name = "allergies", columnDefinition = "TEXT")
     private String allergies;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    private User owner;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Vaccine> vaccines;
 
     public Pet(CreatePetDTO createPetDTO) {
-        this.userId = createPetDTO.getUserId();
         this.name = createPetDTO.getName();
         this.age = createPetDTO.getAge();
         this.weight = createPetDTO.getWeight();
@@ -68,5 +68,9 @@ public class Pet {
 
     public void addVaccine(Vaccine vaccine) {
         this.vaccines.add(vaccine);
+    }
+
+    public void addOwner(User user) {
+        this.owner = user;
     }
 }

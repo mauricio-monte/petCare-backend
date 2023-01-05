@@ -1,11 +1,13 @@
 package com.petcare.backend.service;
 
 import com.petcare.backend.domain.Pet;
+import com.petcare.backend.domain.User;
 import com.petcare.backend.domain.Vaccine;
 import com.petcare.backend.dto.pet.CreatePetDTO;
 import com.petcare.backend.dto.vaccine.CreateVaccineDTO;
 import com.petcare.backend.dto.pet.UpdatePetDTO;
 import com.petcare.backend.exception.PetNotFoundException;
+import com.petcare.backend.exception.UserNotFoundException;
 import com.petcare.backend.repository.PetRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,11 +19,13 @@ import java.util.Optional;
 @AllArgsConstructor
 public class PetService {
     private PetRepository petRepository;
+    private UserService userService;
     private VaccineService vaccineService;
 
-    public List<Pet> getPets(Long userId) {
+    public List<Pet> getPets(Long userId) throws UserNotFoundException {
         if (userId != null) {
-            return petRepository.findAllByUserId(userId);
+            User user = userService.getUserById(userId);
+            return petRepository.findAllByOwner(user);
         } else {
             return petRepository.findAll();
         }
@@ -37,8 +41,10 @@ public class PetService {
         }
     }
 
-    public Pet addNewPet(CreatePetDTO createPetDTO) {
+    public Pet addNewPet(CreatePetDTO createPetDTO) throws UserNotFoundException {
+        User user = userService.getUserById(createPetDTO.getUserId());
         Pet pet = new Pet(createPetDTO);
+        pet.addOwner(user);
         return petRepository.save(pet);
     }
 

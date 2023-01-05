@@ -20,15 +20,8 @@ import java.util.List;
 @Data
 public class User {
     @Id
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
-    )
+    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     @Column(name = "id", updatable = false)
     private Long id;
 
@@ -41,7 +34,7 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private List<Pet> pets;
 
     public User(String name, String email, String passwordHash) {
@@ -53,10 +46,6 @@ public class User {
     public void updateUser(UpdateUserDTO userDTO) {
         if (userDTO.getName() != null) this.name = userDTO.getName();
         if (userDTO.getEmail() != null) this.email = userDTO.getEmail();
-    }
-
-    public void addPet(Pet pet) {
-        this.pets.add(pet);
     }
 
     @Override

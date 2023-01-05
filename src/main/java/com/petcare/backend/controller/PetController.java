@@ -5,7 +5,6 @@ import java.util.List;
 import com.petcare.backend.dto.pet.UpdatePetDTO;
 import com.petcare.backend.exception.PetNotFoundException;
 import com.petcare.backend.exception.UserNotFoundException;
-import com.petcare.backend.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +22,14 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PetController {
     private PetService petService;
-    private UserService userService;
 
     @GetMapping
     public ResponseEntity<List<Pet>> getPets(@RequestParam(required = false) Long userId) {
-        return new ResponseEntity<>(petService.getPets(userId), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(petService.getPets(userId), HttpStatus.OK);
+        } catch (UserNotFoundException userNotFoundException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, userNotFoundException.getMessage(), userNotFoundException);
+        }
     }
 
     @GetMapping("/{id}")
@@ -42,9 +44,9 @@ public class PetController {
     @PostMapping
     public ResponseEntity<Pet> createNewPet(@RequestBody CreatePetDTO createPetDTO) {
         try {
-            return new ResponseEntity<>(userService.addPetToUser(createPetDTO), HttpStatus.OK);
-        } catch (UserNotFoundException petException) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, petException.getMessage(), petException);
+            return new ResponseEntity<>(petService.addNewPet(createPetDTO), HttpStatus.CREATED);
+        } catch (UserNotFoundException userNotFoundException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, userNotFoundException.getMessage(), userNotFoundException);
         }
     }
 
@@ -66,5 +68,4 @@ public class PetController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, petException.getMessage(), petException);
         }
     }
-
 }
