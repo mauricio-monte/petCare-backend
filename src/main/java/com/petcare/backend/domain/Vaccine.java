@@ -60,11 +60,4 @@ public class Vaccine {
         this.doses.add(dose);
         dose.addVaccine(this);
     }
-
-    public void updateDoses(List<Dose> updatedDoses) {
-        if (!this.doses.equals(updatedDoses)) {
-            this.doses.clear();
-            this.doses.addAll(updatedDoses);
-        }
-    }
 }

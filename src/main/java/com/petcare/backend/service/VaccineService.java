@@ -57,16 +57,9 @@ public class VaccineService {
     }
 
     public Vaccine updateVaccine(Long vaccineId, UpdateVaccineDTO updateVaccineDTO) throws VaccineNotFoundException {
-        Optional<Vaccine> vaccineOptional = vaccineRepository.findById(vaccineId);
-
-        if (vaccineOptional.isPresent()) {
-            Vaccine vaccine = vaccineOptional.get();
-            vaccine.updateVaccine(updateVaccineDTO);
-            vaccineRepository.save(vaccine);
-            return vaccine;
-        } else {
-            throw new VaccineNotFoundException();
-        }
+        Vaccine vaccine = this.getVaccineById(vaccineId);
+        vaccine.updateVaccine(updateVaccineDTO);
+        return vaccineRepository.save(vaccine);
     }
 
     public void deleteVaccine(Long vaccineId) throws VaccineNotFoundException {
