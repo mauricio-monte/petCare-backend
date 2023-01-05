@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdatePetDTO {
     private String name;
+    private String profileImage;
     private Integer age;
     private Float weight;
     private String species;

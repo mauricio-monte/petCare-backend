@@ -25,6 +25,9 @@ public class Pet {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "profile_image", columnDefinition = "TEXT")
+    private String profileImage;
+
     @Column(name = "age")
     private Integer age;
 
