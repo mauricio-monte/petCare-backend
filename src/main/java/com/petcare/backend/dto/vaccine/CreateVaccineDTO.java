@@ -13,7 +13,7 @@ import java.util.List;
 public class CreateVaccineDTO {
     private String description;
     private String veterinaryClinic;
-    private Boolean singleDose;
+    private Boolean isSingleDose;
     private Long petId;
     private List<CreateDoseFromVaccineDTO> doses;
 

@@ -1,25 +1,25 @@
 package com.petcare.backend.service;
 
 import com.petcare.backend.domain.Dose;
+import com.petcare.backend.domain.Pet;
 import com.petcare.backend.domain.Vaccine;
 import com.petcare.backend.dto.dose.CreateDoseFromVaccineDTO;
 import com.petcare.backend.dto.vaccine.CreateVaccineDTO;
 import com.petcare.backend.dto.vaccine.UpdateVaccineDTO;
+import com.petcare.backend.exception.PetNotFoundException;
 import com.petcare.backend.exception.VaccineNotFoundException;
 import com.petcare.backend.repository.VaccineRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class VaccineService {
-
     private final VaccineRepository vaccineRepository;
-    private final DoseService doseService;
+    private final PetService petService;
 
     public List<Vaccine> getVaccines(Long petId) {
         if (petId != null) {
@@ -39,19 +39,19 @@ public class VaccineService {
         }
     }
 
-    public Vaccine addNewVaccine(CreateVaccineDTO createVaccineDTO) {
-        boolean thisVaccineHasADose = createVaccineDTO.vaccineHasDose();
-        List<Dose> doses = new ArrayList<>();
+    public Vaccine addNewVaccine(CreateVaccineDTO createVaccineDTO) throws PetNotFoundException {
+        Pet pet = petService.getPetById(createVaccineDTO.getPetId());
         Vaccine vaccine = new Vaccine(createVaccineDTO);
-        vaccineRepository.save(vaccine);
+        vaccine.addPet(pet);
+
+        boolean thisVaccineHasADose = createVaccineDTO.vaccineHasDose();
 
         if (thisVaccineHasADose) {
-            for (CreateDoseFromVaccineDTO dose : createVaccineDTO.getDoses()) {
-                Dose newDose = doseService.addNewDose(dose);
-                doses.add(newDose);
+            for (CreateDoseFromVaccineDTO doseDTO : createVaccineDTO.getDoses()) {
+                vaccine.addDose(new Dose(doseDTO));
             }
         }
-        vaccine.setDoses(doses);
+
         return vaccineRepository.save(vaccine);
     }
 

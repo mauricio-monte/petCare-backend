@@ -10,8 +10,9 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateDoseFromVaccineDTO {
+public class CreateDoseDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
     private Date date;
     private Boolean isApplied;
+    private Long vaccineId;
 }

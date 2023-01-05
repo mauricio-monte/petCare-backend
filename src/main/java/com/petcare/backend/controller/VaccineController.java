@@ -5,7 +5,6 @@ import com.petcare.backend.dto.vaccine.CreateVaccineDTO;
 import com.petcare.backend.dto.vaccine.UpdateVaccineDTO;
 import com.petcare.backend.exception.PetNotFoundException;
 import com.petcare.backend.exception.VaccineNotFoundException;
-import com.petcare.backend.service.PetService;
 import com.petcare.backend.service.VaccineService;
 import com.petcare.backend.util.UrlConstants;
 import lombok.AllArgsConstructor;
@@ -20,10 +19,7 @@ import java.util.List;
 @RequestMapping(path = UrlConstants.VACCINE_URL)
 @AllArgsConstructor
 public class VaccineController {
-
     private VaccineService vaccineService;
-    private PetService petService;
-
 
     @GetMapping
     public ResponseEntity<List<Vaccine>> getVaccines(@RequestParam(required = false) Long petId) {
@@ -42,7 +38,7 @@ public class VaccineController {
     @PostMapping
     public ResponseEntity<Vaccine> createNewVaccine(@RequestBody CreateVaccineDTO createVaccineDTO) {
         try {
-            return new ResponseEntity<>(petService.addVaccineToPet(createVaccineDTO), HttpStatus.CREATED);
+            return new ResponseEntity<>(vaccineService.addNewVaccine(createVaccineDTO), HttpStatus.CREATED);
         } catch (PetNotFoundException petNotFoundException) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, petNotFoundException.getMessage(), petNotFoundException);
         }
@@ -66,5 +62,4 @@ public class VaccineController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, vaccineException.getMessage(), vaccineException);
         }
     }
-
 }

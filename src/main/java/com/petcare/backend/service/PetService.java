@@ -2,9 +2,7 @@ package com.petcare.backend.service;
 
 import com.petcare.backend.domain.Pet;
 import com.petcare.backend.domain.User;
-import com.petcare.backend.domain.Vaccine;
 import com.petcare.backend.dto.pet.CreatePetDTO;
-import com.petcare.backend.dto.vaccine.CreateVaccineDTO;
 import com.petcare.backend.dto.pet.UpdatePetDTO;
 import com.petcare.backend.exception.PetNotFoundException;
 import com.petcare.backend.exception.UserNotFoundException;
@@ -20,7 +18,6 @@ import java.util.Optional;
 public class PetService {
     private PetRepository petRepository;
     private UserService userService;
-    private VaccineService vaccineService;
 
     public List<Pet> getPets(Long userId) throws UserNotFoundException {
         if (userId != null) {
@@ -59,20 +56,6 @@ public class PetService {
 
         if (thisAnimalExists) {
             petRepository.deleteById(petId);
-        } else {
-            throw new PetNotFoundException();
-        }
-    }
-
-    public Vaccine addVaccineToPet(CreateVaccineDTO vaccineDTO) throws PetNotFoundException {
-        Optional<Pet> petOptional = petRepository.findById(vaccineDTO.getPetId());
-
-        if (petOptional.isPresent()) {
-            Pet pet = petOptional.get();
-            Vaccine vaccine = this.vaccineService.addNewVaccine(vaccineDTO);
-            pet.addVaccine(vaccine);
-            petRepository.save(pet);
-            return vaccine;
         } else {
             throw new PetNotFoundException();
         }

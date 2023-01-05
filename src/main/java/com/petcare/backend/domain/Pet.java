@@ -52,7 +52,7 @@ public class Pet {
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User owner;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
     private List<Vaccine> vaccines;
 
     public Pet(CreatePetDTO createPetDTO) {
@@ -71,10 +71,6 @@ public class Pet {
         if (pet.getSpecies() != null) this.species = pet.getSpecies();
         if (pet.getRace() != null) this.race = pet.getRace();
         if (pet.getAllergies() != null) this.allergies = pet.getAllergies();
-    }
-
-    public void addVaccine(Vaccine vaccine) {
-        this.vaccines.add(vaccine);
     }
 
     public void addOwner(User user) {
