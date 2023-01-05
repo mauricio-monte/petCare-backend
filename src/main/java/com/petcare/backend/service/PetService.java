@@ -49,16 +49,9 @@ public class PetService {
     }
 
     public Pet updatePet(Long petId, UpdatePetDTO updatedPet) throws PetNotFoundException {
-        Optional<Pet> petOptional = petRepository.findById(petId);
-
-        if (petOptional.isPresent()) {
-            Pet pet = petOptional.get();
-            pet.updatePet(updatedPet);
-            petRepository.save(pet);
-            return pet;
-        } else {
-            throw new PetNotFoundException();
-        }
+        Pet pet = getPetById(petId);
+        pet.updatePet(updatedPet);
+        return petRepository.save(pet);
     }
 
     public void deletePet(Long petId) throws PetNotFoundException {
