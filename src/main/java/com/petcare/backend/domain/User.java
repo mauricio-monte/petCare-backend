@@ -1,5 +1,6 @@
 package com.petcare.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petcare.backend.dto.user.UpdateUserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,6 +35,7 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private List<Pet> pets;
 

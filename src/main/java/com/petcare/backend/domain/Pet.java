@@ -1,7 +1,8 @@
 package com.petcare.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petcare.backend.dto.pet.CreatePetDTO;
 import com.petcare.backend.dto.pet.UpdatePetDTO;
 import lombok.AllArgsConstructor;
@@ -47,11 +48,12 @@ public class Pet {
     @Column(name = "allergies", columnDefinition = "TEXT")
     private String allergies;
 
-    @JsonIgnore
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User owner;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
     private List<Vaccine> vaccines;
 

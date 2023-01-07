@@ -1,6 +1,7 @@
 package com.petcare.backend.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petcare.backend.dto.vaccine.CreateVaccineDTO;
 import com.petcare.backend.dto.vaccine.UpdateVaccineDTO;
 import lombok.AllArgsConstructor;
@@ -32,11 +33,12 @@ public class Vaccine {
     @Column(name = "is_single_dose", nullable = false)
     private Boolean isSingleDose = false;
 
-    @JsonIgnore
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "pet_id", referencedColumnName = "id")
     private Pet pet;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vaccine")
     private List<Dose> doses = new ArrayList<>();
 
