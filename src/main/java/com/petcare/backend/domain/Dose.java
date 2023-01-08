@@ -30,10 +30,10 @@ public class Dose {
     private Date date;
 
     @Column(name = "is_applied", nullable = false)
-    private boolean isApplied = false;
+    private Boolean isApplied = false;
 
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vaccine_id", referencedColumnName = "id")
     private Vaccine vaccine;
 

@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,13 +50,13 @@ public class Pet {
     private String allergies;
 
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User owner;
 
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
-    private List<Vaccine> vaccines;
+    private List<Vaccine> vaccines = new ArrayList<>();
 
     public Pet(CreatePetDTO createPetDTO) {
         this.name = createPetDTO.getName();

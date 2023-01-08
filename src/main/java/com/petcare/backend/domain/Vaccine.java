@@ -34,7 +34,7 @@ public class Vaccine {
     private Boolean isSingleDose = false;
 
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", referencedColumnName = "id")
     private Pet pet;
 

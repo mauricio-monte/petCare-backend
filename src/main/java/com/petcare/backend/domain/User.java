@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,7 +38,7 @@ public class User {
 
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    private List<Pet> pets;
+    private List<Pet> pets = new ArrayList<>();
 
     public User(String name, String email, String passwordHash) {
         this.name = name;
