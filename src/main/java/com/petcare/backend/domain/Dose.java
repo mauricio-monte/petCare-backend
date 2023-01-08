@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.petcare.backend.dto.dose.CreateDoseDTO;
 import com.petcare.backend.dto.dose.CreateDoseFromVaccineDTO;
+import com.petcare.backend.dto.dose.UpdateDoseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,5 +45,10 @@ public class Dose {
     public Dose(CreateDoseFromVaccineDTO createDoseDTO) {
         this.date = createDoseDTO.getDate();
         this.isApplied = createDoseDTO.getIsApplied();
+    }
+
+    public void updateDose(UpdateDoseDTO updateDoseDTO) {
+        if (updateDoseDTO.getDate() != null) this.date = updateDoseDTO.getDate();
+        if (updateDoseDTO.getIsApplied() != null) this.isApplied = updateDoseDTO.getIsApplied();
     }
 }
