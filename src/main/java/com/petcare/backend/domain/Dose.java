@@ -45,8 +45,4 @@ public class Dose {
         this.date = createDoseDTO.getDate();
         this.isApplied = createDoseDTO.getIsApplied();
     }
-
-    public void addVaccine(Vaccine vaccine) {
-        this.vaccine = vaccine;
-    }
 }

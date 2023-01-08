@@ -75,7 +75,8 @@ public class Pet {
         if (pet.getAllergies() != null) this.allergies = pet.getAllergies();
     }
 
-    public void addOwner(User user) {
-        this.owner = user;
+    public void addVaccine(Vaccine vaccine) {
+        this.vaccines.add(vaccine);
+        vaccine.setPet(this);
     }
 }

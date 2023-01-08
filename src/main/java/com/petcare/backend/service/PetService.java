@@ -41,7 +41,7 @@ public class PetService {
     public Pet addNewPet(CreatePetDTO createPetDTO) throws UserNotFoundException {
         User user = userService.getUserById(createPetDTO.getUserId());
         Pet pet = new Pet(createPetDTO);
-        pet.addOwner(user);
+        user.addPet(pet);
         return petRepository.save(pet);
     }
 

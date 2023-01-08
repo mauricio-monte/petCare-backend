@@ -19,7 +19,7 @@ public class DoseService {
     public Dose addNewDose(CreateDoseDTO createDoseDTO) throws VaccineNotFoundException {
         Vaccine vaccine = vaccineService.getVaccineById(createDoseDTO.getVaccineId());
         Dose dose = new Dose(createDoseDTO);
-        dose.addVaccine(vaccine);
+        vaccine.addDose(dose);
         return doseRepository.save(dose);
     }
 

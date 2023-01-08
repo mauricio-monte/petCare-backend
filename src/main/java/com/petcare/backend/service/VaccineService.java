@@ -43,7 +43,7 @@ public class VaccineService {
     public Vaccine addNewVaccine(CreateVaccineDTO createVaccineDTO) throws PetNotFoundException {
         Pet pet = petService.getPetById(createVaccineDTO.getPetId());
         Vaccine vaccine = new Vaccine(createVaccineDTO);
-        vaccine.addPet(pet);
+        pet.addVaccine(vaccine);
 
         boolean thisVaccineHasADose = createVaccineDTO.vaccineHasDose();
 

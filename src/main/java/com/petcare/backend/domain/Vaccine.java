@@ -54,12 +54,8 @@ public class Vaccine {
         if (updatedVaccine.getIsSingleDose() != null) this.isSingleDose = updatedVaccine.getIsSingleDose();
     }
 
-    public void addPet(Pet pet) {
-        this.pet = pet;
-    }
-
     public void addDose(Dose dose) {
         this.doses.add(dose);
-        dose.addVaccine(this);
+        dose.setVaccine(this);
     }
 }
