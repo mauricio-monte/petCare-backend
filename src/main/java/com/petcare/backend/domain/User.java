@@ -1,5 +1,6 @@
 package com.petcare.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petcare.backend.dto.user.UpdateUserDTO;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,7 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 

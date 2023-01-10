@@ -7,8 +7,10 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.petcare.backend.security.Jwks;
 import com.petcare.backend.service.JpaUserDetailsService;
+import com.petcare.backend.util.UrlConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -39,8 +41,6 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/v2/api-docs/**",
             "/swagger-resources/**",
-            "/token",
-            "/users/registration",
             "/login"
     };
 
@@ -62,6 +62,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests( auth -> auth
+                        .antMatchers(HttpMethod.POST, "/" + UrlConstants.USER_URL).permitAll()
                         .antMatchers(AUTH_WHITE_LIST).permitAll()
                         .anyRequest().authenticated()
                 )
