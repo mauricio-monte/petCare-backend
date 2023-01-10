@@ -40,7 +40,7 @@ public class UserController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/registration")
     public ResponseEntity<LoginReturnDTO> createNewUser(@RequestBody CreateUserDTO postDTO) {
         try {
             return new ResponseEntity<>(userService.addNewUser(postDTO), HttpStatus.CREATED);
