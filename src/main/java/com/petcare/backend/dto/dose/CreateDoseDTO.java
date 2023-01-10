@@ -1,4 +1,4 @@
-package com.petcare.backend.dto.pet;
+package com.petcare.backend.dto.dose;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -10,13 +10,9 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdatePetDTO {
-    private String name;
-    private String profileImage;
+public class CreateDoseDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
-    private Date birthdate;
-    private Float weight;
-    private String species;
-    private String race;
-    private String allergies;
+    private Date date;
+    private Boolean isApplied;
+    private Long vaccineId;
 }

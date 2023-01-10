@@ -13,5 +13,5 @@ import java.util.Date;
 public class CreateDoseFromVaccineDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
     private Date date;
-    private boolean applied;
+    private Boolean isApplied;
 }

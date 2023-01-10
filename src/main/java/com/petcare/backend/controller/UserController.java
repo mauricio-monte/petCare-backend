@@ -23,7 +23,6 @@ import java.util.List;
 @RequestMapping(path = UrlConstants.USER_URL)
 @AllArgsConstructor
 public class UserController {
-
     private UserService userService;
 
     @GetMapping
@@ -39,7 +38,6 @@ public class UserController {
         } catch (LoginFailedException | UserNotFoundException loginException) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, loginException.getMessage(), loginException);
         }
-
     }
 
     @PostMapping

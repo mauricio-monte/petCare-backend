@@ -1,14 +1,16 @@
 package com.petcare.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.petcare.backend.dto.dose.CreateDoseDTO;
 import com.petcare.backend.dto.dose.CreateDoseFromVaccineDTO;
+import com.petcare.backend.dto.dose.UpdateDoseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Objects;
 
 @Entity
 @Table(name = "doses")
@@ -17,37 +19,36 @@ import java.util.Objects;
 @Data
 public class Dose {
     @Id
-    @SequenceGenerator(
-            name = "dose_sequence",
-            sequenceName = "dose_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "dose_sequence"
-    )
+    @SequenceGenerator(name = "dose_sequence", sequenceName = "dose_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dose_sequence")
+    @Column(name = "id", updatable = false)
     private Long id;
 
+    @Column(name = "date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    private boolean applied;
+    @Column(name = "is_applied", nullable = false)
+    private Boolean isApplied = false;
 
-    public Dose(CreateDoseFromVaccineDTO createDoseFromVaccineDTO) {
-        this.date = createDoseFromVaccineDTO.getDate();
-        this.applied = createDoseFromVaccineDTO.isApplied();
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vaccine_id", referencedColumnName = "id")
+    private Vaccine vaccine;
+
+    public Dose(CreateDoseDTO createDoseDTO) {
+        this.date = createDoseDTO.getDate();
+        this.isApplied = createDoseDTO.getIsApplied();
     }
 
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Dose dose = (Dose) o;
-        return date.equals(dose.date) && applied == dose.applied;
+    public Dose(CreateDoseFromVaccineDTO createDoseDTO) {
+        this.date = createDoseDTO.getDate();
+        this.isApplied = createDoseDTO.getIsApplied();
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(date, applied);
+    public void updateDose(UpdateDoseDTO updateDoseDTO) {
+        if (updateDoseDTO.getDate() != null) this.date = updateDoseDTO.getDate();
+        if (updateDoseDTO.getIsApplied() != null) this.isApplied = updateDoseDTO.getIsApplied();
     }
 }
