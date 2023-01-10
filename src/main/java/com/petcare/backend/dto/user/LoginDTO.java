@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class LoginDTO {
-    @SerializedName("username")
-    public String username;
+    @SerializedName("email")
+    public String email;
     @SerializedName("password")
     public String password;
 }

@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class UpdateVaccineDTO {
     private String description;
     private String veterinaryClinic;
-    private Boolean singleDose;
+    private Boolean isSingleDose;
 }

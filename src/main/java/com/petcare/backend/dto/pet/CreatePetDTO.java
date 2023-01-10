@@ -1,29 +1,23 @@
 package com.petcare.backend.dto.pet;
 
-import com.petcare.backend.domain.Pet;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreatePetDTO {
     private String name;
-    private Integer age;
+    private String profileImage;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
+    private Date birthdate;
     private Float weight;
     private String species;
     private String race;
     private String allergies;
     private Long userId;
-
-    public CreatePetDTO(Pet pet) {
-        this.name = pet.getName();
-        this.age = pet.getAge();
-        this.weight = pet.getWeight();
-        this.species = pet.getSpecies();
-        this.race = pet.getRace();
-        this.allergies = pet.getAllergies();
-    }
 }

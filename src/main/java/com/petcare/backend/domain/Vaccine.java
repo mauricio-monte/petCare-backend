@@ -1,5 +1,7 @@
 package com.petcare.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petcare.backend.dto.vaccine.CreateVaccineDTO;
 import com.petcare.backend.dto.vaccine.UpdateVaccineDTO;
 import lombok.AllArgsConstructor;
@@ -7,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,52 +18,44 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class Vaccine {
-
     @Id
-    @SequenceGenerator(
-            name = "vaccine_sequence",
-            sequenceName = "vaccine_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "vaccine_sequence"
-    )
+    @SequenceGenerator(name = "vaccine_sequence", sequenceName = "vaccine_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vaccine_sequence")
+    @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column
-    private Long petId;
-    
-    @Column(nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column
+    @Column(name = "veterinary_clinic")
     private String veterinaryClinic;
 
-    @Column
-    private Boolean singleDose;
+    @Column(name = "is_single_dose", nullable = false)
+    private Boolean isSingleDose = false;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Dose> doses;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pet_id", referencedColumnName = "id")
+    private Pet pet;
+
+    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vaccine")
+    private List<Dose> doses = new ArrayList<>();
 
     public Vaccine(CreateVaccineDTO vaccineDTO) {
-        this.petId = vaccineDTO.getPetId();
         this.description = vaccineDTO.getDescription();
         this.veterinaryClinic = vaccineDTO.getVeterinaryClinic();
-        this.singleDose = vaccineDTO.getSingleDose();
+        this.isSingleDose = vaccineDTO.getIsSingleDose();
     }
 
     public void updateVaccine(UpdateVaccineDTO updatedVaccine) {
         if (updatedVaccine.getDescription() != null) this.description = updatedVaccine.getDescription();
         if (updatedVaccine.getVeterinaryClinic() != null) this.veterinaryClinic = updatedVaccine.getVeterinaryClinic();
-        if (updatedVaccine.getSingleDose() != null) this.singleDose = updatedVaccine.getSingleDose();
+        if (updatedVaccine.getIsSingleDose() != null) this.isSingleDose = updatedVaccine.getIsSingleDose();
     }
 
-    public void updateDoses(List<Dose> updatedDoses) {
-        if (!this.doses.equals(updatedDoses)) {
-            this.doses.clear();
-            this.doses.addAll(updatedDoses);
-        }
+    public void addDose(Dose dose) {
+        this.doses.add(dose);
+        dose.setVaccine(this);
     }
-
 }
