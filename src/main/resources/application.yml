@@ -1,0 +1,43 @@
+spring:
+  profiles:
+    active: dev
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  mvc.pathmatch:
+    matching-strategy: ANT_PATH_MATCHER
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+server:
+  error:
+    include-message: always
+
+---
+
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/petcare
+    username: postgres
+    password:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update # Options: (none, validate, update, create-drop)
+
+---
+
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:postgresql://${PROD_DB_HOST}:${PROD_DB_PORT}/${PROD_DB_NAME}
+    username: ${PROD_DB_USERNAME}
+    password: ${PROD_DB_PASSWORD}
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
