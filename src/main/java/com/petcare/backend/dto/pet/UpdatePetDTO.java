@@ -15,6 +15,7 @@ public class UpdatePetDTO {
     private String profileImage;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
     private Date birthdate;
+    private Character sex;
     private Float weight;
     private String species;
     private String race;

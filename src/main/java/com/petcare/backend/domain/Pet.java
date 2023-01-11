@@ -37,6 +37,9 @@ public class Pet {
     @Temporal(TemporalType.DATE)
     private Date birthdate;
 
+    @Column(name = "sex", nullable = false)
+    private Character sex;
+
     @Column(name = "weight")
     private Float weight;
 
@@ -60,7 +63,9 @@ public class Pet {
 
     public Pet(CreatePetDTO createPetDTO) {
         this.name = createPetDTO.getName();
+        this.profileImage = createPetDTO.getProfileImage();
         this.birthdate = createPetDTO.getBirthdate();
+        this.sex = createPetDTO.getSex();
         this.weight = createPetDTO.getWeight();
         this.species = createPetDTO.getSpecies();
         this.race = createPetDTO.getRace();
@@ -69,7 +74,9 @@ public class Pet {
 
     public void updatePet(UpdatePetDTO pet) {
         if (pet.getName() != null) this.name = pet.getName();
+        if (pet.getProfileImage() != null) this.profileImage = pet.getProfileImage();
         if (pet.getBirthdate() != null) this.birthdate = pet.getBirthdate();
+        if (pet.getSex() != null) this.sex = pet.getSex();
         if (pet.getWeight() != null) this.weight = pet.getWeight();
         if (pet.getSpecies() != null) this.species = pet.getSpecies();
         if (pet.getRace() != null) this.race = pet.getRace();
