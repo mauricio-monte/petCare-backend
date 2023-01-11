@@ -1,7 +1,6 @@
 # petCare-backend
 
-Backend do projeto PetCare, implementado durante a disciplina de Projeto de Software 1  
-Uma versão em produção deste app está disponível em: `https://petcare-backend-production.up.railway.app/api/v1`
+Backend do projeto PetCare, implementado durante a disciplina de Projeto de Software 1
 
 ## Como executar este projeto localmente
 
@@ -9,7 +8,8 @@ Uma versão em produção deste app está disponível em: `https://petcare-backe
 
 Para executar este projeto localmente, é necessário instalar as dependências:
 
-- [Oracle OpenJDK 19](https://jdk.java.net/19/)
+- [Oracle OpenJDK 19](https://jdk.java.net/19/) 
+  > O IntelliJ faz o download dessa versão se for configurada como a versão da JDK para o projeto. 
 - [PostgreSQL 15](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
   > Durante a instalação do PostgreSQL, será pedido que registre uma senha do usuário superuser (postgres). Guarde essa senha pois será usada em outras etapas
 
@@ -18,18 +18,22 @@ Para executar este projeto localmente, é necessário instalar as dependências:
 Pode ser feito via pgAdmin 4 ou via SQL Shell (psql)
 
 1. Logar no psql usando o login postgres
+    ``` 
+    # Para os campos vazios basta apertar enter sem digitar nada 
+    Server [localhost]:
+    Database [postgres]: 
+    Port [5432]:
+    Username [postgres]:
+    Password for user postgres: <inserir senha cadastrada anteriormente>
+    ```
 
-   > Aceitar todas as opções default e preencher apenas a senha (cadastrada durante a instalação)
-
-2. Criar banco de dados e o usuário que será utilizado pela aplicação
-
-```
-  CREATE USER petcare_backend WITH PASSWORD 'P3tc4r3';
-  CREATE DATABASE petcare OWNER petcare_backend;
-  GRANT ALL PRIVILEGES ON DATABASE petcare TO petcare_backend;
-  GRANT ALL PRIVILEGES ON DATABASE petcare TO postgres;
-```
+2. Criar banco de dados com o nome `petcare`
+    ```
+    CREATE DATABASE petcare;
+    ```
 
 3. Sair do psql com o comando `exit`
 
-4. Iniciar a aplicação
+4. Preencher a senha do usuário `postgres` para o profile `dev`, no arquivo application.yml em src/main/resources 
+
+5. Iniciar a aplicação pela IDE

@@ -1,6 +1,6 @@
 package com.petcare.backend.service;
 
-import com.petcare.backend.domain.SecurityUser;
+import com.petcare.backend.security.SecurityUser;
 import com.petcare.backend.domain.User;
 import com.petcare.backend.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;

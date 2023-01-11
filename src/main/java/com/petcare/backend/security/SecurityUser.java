@@ -1,5 +1,6 @@
-package com.petcare.backend.domain;
+package com.petcare.backend.security;
 
+import com.petcare.backend.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
