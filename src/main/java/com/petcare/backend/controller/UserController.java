@@ -1,7 +1,6 @@
 package com.petcare.backend.controller;
 
 import com.petcare.backend.domain.User;
-import com.petcare.backend.dto.user.LoginReturnDTO;
 import com.petcare.backend.dto.user.CreateUserDTO;
 import com.petcare.backend.dto.user.UpdateUserDTO;
 import com.petcare.backend.exception.EmailAlreadyRegisteredException;
@@ -29,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<LoginReturnDTO> createNewUser(@RequestBody CreateUserDTO postDTO) {
+    public ResponseEntity<User> createNewUser(@RequestBody CreateUserDTO postDTO) {
         try {
             return new ResponseEntity<>(userService.addNewUser(postDTO), HttpStatus.CREATED);
         } catch (EmailAlreadyRegisteredException | UsernameAlreadyRegisteredException conflictException) {
@@ -38,7 +37,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<LoginReturnDTO> updateUser(@PathVariable("id") Long userId, @RequestBody UpdateUserDTO userDTO) {
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long userId, @RequestBody UpdateUserDTO userDTO) {
         try {
             return new ResponseEntity<>(userService.updateUser(userId, userDTO), HttpStatus.OK);
         } catch (UserNotFoundException updateException) {
