@@ -1,7 +1,6 @@
 package com.petcare.backend.service;
 
 import com.petcare.backend.domain.User;
-import com.petcare.backend.dto.user.LoginReturnDTO;
 import com.petcare.backend.dto.user.CreateUserDTO;
 import com.petcare.backend.dto.user.UpdateUserDTO;
 import com.petcare.backend.exception.EmailAlreadyRegisteredException;
@@ -38,23 +37,31 @@ public class UserService {
         }
     }
 
-    public LoginReturnDTO addNewUser(CreateUserDTO userDTO) throws EmailAlreadyRegisteredException, UsernameAlreadyRegisteredException {
+    public User getUserByEmail(String email) throws UserNotFoundException {
+        Optional<User> userOptional = userRepository.getUserByEmail(email);
+
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        } else {
+            throw new UserNotFoundException();
+        }
+    }
+
+    public User addNewUser(CreateUserDTO userDTO) throws EmailAlreadyRegisteredException, UsernameAlreadyRegisteredException {
         validateEmail(userDTO.getEmail());
 
         String passwordHash = passwordEncoder.encode(userDTO.getPassword());
-
-        User newUser = userRepository.save(new User(userDTO.getName(), userDTO.getEmail(), passwordHash));
-
-        return new LoginReturnDTO(newUser);
+        User user = new User(userDTO.getName(), userDTO.getEmail(), passwordHash);
+        return userRepository.save(user);
     }
 
-    public LoginReturnDTO updateUser(Long userId, UpdateUserDTO updateUserDTO) throws UserNotFoundException {
+    public User updateUser(Long userId, UpdateUserDTO updateUserDTO) throws UserNotFoundException {
         Optional<User> userOptional = userRepository.findById(userId);
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             user.updateUser(updateUserDTO);
-            return new LoginReturnDTO(userRepository.save(user));
+            return userRepository.save(user);
         } else {
             throw new UserNotFoundException();
         }

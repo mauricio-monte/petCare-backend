@@ -15,13 +15,15 @@ public class LoginReturnDTO {
     private Long id;
     private String name;
     private String email;
+    private String token;
 
     private List<Pet> pets;
 
-    public LoginReturnDTO(User user) {
+    public LoginReturnDTO(User user, String token) {
         this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();
+        this.token = token;
         this.pets = user.getPets();
     }
 }
