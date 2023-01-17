@@ -36,6 +36,15 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable("id") Long userId) {
+        try {
+            return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
+        } catch (UserNotFoundException userNotFoundException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, userNotFoundException.getMessage(), userNotFoundException);
+        }
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long userId, @RequestBody UpdateUserDTO userDTO) {
         try {
