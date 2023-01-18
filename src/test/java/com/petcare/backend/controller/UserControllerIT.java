@@ -21,8 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -41,28 +40,11 @@ public class UserControllerIT {
     @Autowired
     private UserRepository userRepository;
 
-    private void createUsers() {
-        CreateUserDTO createUserDTO = new CreateUserDTO("test", "test@gmail.com", "test_password");
-    }
-
-    private String loginAndGetToken(CreateUserDTO postDTO) throws Exception {
-
-        LoginDTO loginDTO = new LoginDTO(postDTO.getEmail(), postDTO.getPassword());
-        String loginDTOJson = JsonMapperUtil.fromObjectToJsonString(loginDTO);
-
-        MvcResult mvcResult = mvc.perform(post("/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(loginDTOJson))
-                        .andReturn();
-        mvcResult.getResponse().getContentAsString();
-        LoginReturnDTO loginReturnDTO = JsonMapperUtil.fromJsonStringToObject(mvcResult.getResponse().getContentAsString(), LoginReturnDTO.class);
-        return "Bearer " + loginReturnDTO.getToken();
-    }
-
     @Test
     public void testPost()
             throws Exception {
 
+        // User creation test
         CreateUserDTO createUserDTO = new CreateUserDTO("test", "test@gmail.com", "test_password");
         String test = JsonMapperUtil.fromObjectToJsonString(createUserDTO);
 
@@ -76,7 +58,7 @@ public class UserControllerIT {
 
         System.out.println(postResult.getResponse().getContentAsString());
 
-
+        // Get all users test
         User createdUser = JsonMapperUtil.fromJsonStringToObject(postResult.getResponse().getContentAsString(), User.class);
         int createdUserId = Math.toIntExact(createdUser.getId());
         String bearerAuth = loginAndGetToken(createUserDTO);
@@ -94,8 +76,8 @@ public class UserControllerIT {
 
         System.out.println(getAllResult.getResponse().getContentAsString());
 
-
-        MvcResult getOneResult = mvc.perform(get("/users/" + createdUser.getId())
+        // Get one user test
+        MvcResult getOneResult = mvc.perform(get("/users/" + createdUserId)
                         .header("authorization", bearerAuth)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -111,20 +93,45 @@ public class UserControllerIT {
         Assert.assertEquals(createdUser, getOneUser);
 
 
-    }
+        // Update user test
+        User updatedUser = new User("updatedTest", "updated@test.com");
+        String updatedUserJson = JsonMapperUtil.fromObjectToJsonString(updatedUser);
 
-    @Test
-    public void testGet()
-            throws Exception {
-
-        CreateUserDTO createUserDTO = new CreateUserDTO("test", "test@gmail.com", "test_password");
-        String test = JsonMapperUtil.fromObjectToJsonString(createUserDTO);
-
-        mvc.perform(get("/api/employees")
-                        .contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(patch("/users/" + createdUserId)
+                        .header("authorization", bearerAuth)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatedUserJson))
                 .andExpect(status().isOk())
                 .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].name", is("bob")));
+                .andExpect(jsonPath("$.id", is(createdUserId)))
+                .andExpect(jsonPath("$.name", is(updatedUser.getName())))
+                .andExpect(jsonPath("$.email", is(updatedUser.getEmail())));
+
+        MvcResult getUpdatedResult = mvc.perform(get("/users/" + createdUserId)
+                        .header("authorization", bearerAuth)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(createdUserId)))
+                .andExpect(jsonPath("$.name", is(updatedUser.getName())))
+                .andExpect(jsonPath("$.email", is(updatedUser.getEmail())))
+                .andReturn();
+
+        User getUpdatedUser = JsonMapperUtil.fromJsonStringToObject(getUpdatedResult.getResponse().getContentAsString(), User.class);
+        Assert.assertEquals(updatedUser.getName(), getUpdatedUser.getName());
+        Assert.assertEquals(updatedUser.getEmail(), getUpdatedUser.getEmail());
+    }
+
+    private String loginAndGetToken(CreateUserDTO postDTO) throws Exception {
+
+        LoginDTO loginDTO = new LoginDTO(postDTO.getEmail(), postDTO.getPassword());
+        String loginDTOJson = JsonMapperUtil.fromObjectToJsonString(loginDTO);
+
+        MvcResult mvcResult = mvc.perform(post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(loginDTOJson))
+                .andReturn();
+        mvcResult.getResponse().getContentAsString();
+        LoginReturnDTO loginReturnDTO = JsonMapperUtil.fromJsonStringToObject(mvcResult.getResponse().getContentAsString(), LoginReturnDTO.class);
+        return "Bearer " + loginReturnDTO.getToken();
     }
 }
