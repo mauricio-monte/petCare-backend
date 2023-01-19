@@ -59,10 +59,7 @@ public class PetControllerIT {
         String bearerAuth = utilPair.getSecond();
 
         // Create pet test
-        CreatePetDTO createPetDTO = new CreatePetDTO("simas", "www", new Date("26/07/2020"),
-                                                     Character.valueOf('m'), Float.valueOf(2), "dog",
-                                                "golden retriever", "unknown", userId);
-
+        CreatePetDTO createPetDTO = getTestPetDTO(userId);
         String createPetJson = JsonMapperUtil.fromObjectToJsonString(createPetDTO);
 
         MvcResult createPetResult = mvc.perform(post("/pets")
@@ -70,14 +67,37 @@ public class PetControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createPetJson))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.name", is("simas")))
-                        .andExpect(jsonPath("$.race", is("golden retriever")))
+                        .andExpect(jsonPath("$.name", is(createPetDTO.getName())))
+                        .andExpect(jsonPath("$.race", is(createPetDTO.getRace())))
                         .andReturn();
 
         System.out.println(createPetResult.getResponse().getContentAsString());
         Pet createdPet = JsonMapperUtil.fromJsonStringToObject(createPetResult.getResponse().getContentAsString(), Pet.class);
+        int createdPetId = Math.toIntExact(createdPet.getId());
         Assert.assertEquals(new Pet(createPetDTO),createdPet);
 
+
+        // Get one pet test
+        MvcResult getOneResult = mvc.perform(get("/pets/" + createdPetId)
+                        .header("authorization", bearerAuth)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.id", is(createdPetId)))
+                        .andExpect(jsonPath("$.name", is(createdPet.getName())))
+                        .andExpect(jsonPath("$.race", is(createdPet.getRace())))
+                        .andReturn();
+
+        System.out.println(getOneResult.getResponse().getContentAsString());
+        Pet getOnePet = JsonMapperUtil.fromJsonStringToObject(getOneResult.getResponse().getContentAsString(), Pet.class);
+        Assert.assertEquals(createdPet, getOnePet);
+    }
+
+    private CreatePetDTO getTestPetDTO(Long userId) {
+        return new CreatePetDTO("simas", "www", new Date("26/07/2020"),
+                Character.valueOf('m'), Float.valueOf(2), "dog",
+                "golden retriever", "unknown", userId);
     }
 
     private Pair<Long, String> createUserLoginAndGetToken() throws Exception {
