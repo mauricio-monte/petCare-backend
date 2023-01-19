@@ -52,8 +52,8 @@ public class UserControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createUserJson))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.name", is("test")))
-                        .andExpect(jsonPath("$.email", is("test@gmail.com")))
+                        .andExpect(jsonPath("$.name", is(createUserDTO.getName())))
+                        .andExpect(jsonPath("$.email", is(createUserDTO.getEmail())))
                         .andReturn();
 
         System.out.println(postResult.getResponse().getContentAsString());
@@ -71,8 +71,8 @@ public class UserControllerIT {
                         .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("$[0].id", is(createdUserId)))
-                        .andExpect(jsonPath("$[0].name", is("test")))
-                        .andExpect(jsonPath("$[0].email", is("test@gmail.com")))
+                        .andExpect(jsonPath("$[0].name", is(createUserDTO.getName())))
+                        .andExpect(jsonPath("$[0].email", is(createUserDTO.getEmail())))
                         .andReturn();
 
         System.out.println(getAllResult.getResponse().getContentAsString());
@@ -86,8 +86,8 @@ public class UserControllerIT {
                         .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("$.id", is(createdUserId)))
-                        .andExpect(jsonPath("$.name", is("test")))
-                        .andExpect(jsonPath("$.email", is("test@gmail.com")))
+                        .andExpect(jsonPath("$.name", is(createUserDTO.getName())))
+                        .andExpect(jsonPath("$.email", is(createUserDTO.getEmail())))
                         .andReturn();
 
         System.out.println(getOneResult.getResponse().getContentAsString());

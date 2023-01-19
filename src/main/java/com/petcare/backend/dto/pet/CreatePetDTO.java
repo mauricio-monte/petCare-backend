@@ -21,6 +21,5 @@ public class CreatePetDTO {
     private String species;
     private String race;
     private String allergies;
-
     private Long userId;
 }

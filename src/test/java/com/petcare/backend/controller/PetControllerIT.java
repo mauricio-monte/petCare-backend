@@ -138,6 +138,20 @@ public class PetControllerIT {
         Pet getUpdatedPet = JsonMapperUtil.fromJsonStringToObject(getUpdatedResult.getResponse().getContentAsString(), Pet.class);
         Assert.assertEquals(updatedPet.getName(), getUpdatedPet.getName());
         Assert.assertEquals(updatedPet.getRace(), getUpdatedPet.getRace());
+
+
+        // Delete pet test
+        mvc.perform(delete("/pets/" + createdPetId)
+                        .header("authorization", bearerAuth)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk());
+
+        MvcResult getEmptyResult = mvc.perform(get("/pets")
+                        .header("authorization", bearerAuth)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andReturn();
+
+        Assert.assertEquals("[]", getEmptyResult.getResponse().getContentAsString());
     }
 
     private CreatePetDTO getTestPetDTO(Long userId) {
