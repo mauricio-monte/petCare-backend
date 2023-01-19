@@ -92,6 +92,52 @@ public class PetControllerIT {
         System.out.println(getOneResult.getResponse().getContentAsString());
         Pet getOnePet = JsonMapperUtil.fromJsonStringToObject(getOneResult.getResponse().getContentAsString(), Pet.class);
         Assert.assertEquals(createdPet, getOnePet);
+
+
+        // Get all pets test
+        MvcResult getAllResult = mvc.perform(get("/pets")
+                        .header("authorization", bearerAuth)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$[0].id", is(createdPetId)))
+                        .andExpect(jsonPath("$[0].name", is(createdPet.getName())))
+                        .andExpect(jsonPath("$[0].race", is(createdPet.getRace())))
+                        .andReturn();
+
+        System.out.println(getAllResult.getResponse().getContentAsString());
+
+
+        // Update pet test
+        Pet updatedPet = new Pet(createPetDTO);
+        updatedPet.setName("marvin");
+        updatedPet.setRace("german shepherd");
+        String updatedPetJson = JsonMapperUtil.fromObjectToJsonString(updatedPet);
+
+        mvc.perform(patch("/pets/" + createdPetId)
+                        .header("authorization", bearerAuth)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatedPetJson))
+                        .andExpect(status().isOk())
+                        .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.id", is(createdPetId)))
+                        .andExpect(jsonPath("$.name", is(updatedPet.getName())))
+                        .andExpect(jsonPath("$.race", is(updatedPet.getRace())));
+
+        MvcResult getUpdatedResult = mvc.perform(get("/pets/" + createdPetId)
+                        .header("authorization", bearerAuth)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.id", is(createdPetId)))
+                        .andExpect(jsonPath("$.name", is(updatedPet.getName())))
+                        .andExpect(jsonPath("$.race", is(updatedPet.getRace())))
+                        .andReturn();
+
+        System.out.println(getUpdatedResult.getResponse().getContentAsString());
+        Pet getUpdatedPet = JsonMapperUtil.fromJsonStringToObject(getUpdatedResult.getResponse().getContentAsString(), Pet.class);
+        Assert.assertEquals(updatedPet.getName(), getUpdatedPet.getName());
+        Assert.assertEquals(updatedPet.getRace(), getUpdatedPet.getRace());
     }
 
     private CreatePetDTO getTestPetDTO(Long userId) {
