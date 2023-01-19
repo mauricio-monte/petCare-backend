@@ -7,6 +7,7 @@ import com.petcare.backend.dto.pet.CreatePetDTO;
 import com.petcare.backend.dto.pet.UpdatePetDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -19,11 +20,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode
 public class Pet {
     @Id
     @SequenceGenerator(name = "pet_sequence", sequenceName = "pet_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pet_sequence")
     @Column(name = "id", updatable = false)
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -59,6 +62,7 @@ public class Pet {
 
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
+    @EqualsAndHashCode.Exclude
     private List<Vaccine> vaccines = new ArrayList<>();
 
     public Pet(CreatePetDTO createPetDTO) {

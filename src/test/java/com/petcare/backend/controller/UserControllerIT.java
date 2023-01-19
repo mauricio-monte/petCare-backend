@@ -41,10 +41,10 @@ public class UserControllerIT {
     private UserRepository userRepository;
 
     @Test
-    public void testPost()
+    public void userControllerIntegrationTests()
             throws Exception {
 
-        // User creation test
+        // Create user test
         CreateUserDTO createUserDTO = new CreateUserDTO("test", "test@gmail.com", "test_password");
         String createUserJson = JsonMapperUtil.fromObjectToJsonString(createUserDTO);
 
