@@ -1,6 +1,5 @@
 package com.petcare.backend.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petcare.backend.PetCareBackendApplication;
 import com.petcare.backend.domain.Pet;
 import com.petcare.backend.domain.User;
@@ -24,7 +23,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Date;
 
@@ -43,9 +41,6 @@ public class PetControllerIT {
 
     @Autowired
     private MockMvc mvc;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private PetRepository petRepository;
@@ -152,9 +147,10 @@ public class PetControllerIT {
                         .andReturn();
 
         Assert.assertEquals("[]", getEmptyResult.getResponse().getContentAsString());
+        Assert.assertTrue(this.petRepository.findAll().isEmpty());
     }
 
-    private CreatePetDTO getTestPetDTO(Long userId) {
+    public static CreatePetDTO getTestPetDTO(Long userId) {
         return new CreatePetDTO("simas", "www", new Date("26/07/2020"),
                 Character.valueOf('m'), Float.valueOf(2), "dog",
                 "golden retriever", "unknown", userId);

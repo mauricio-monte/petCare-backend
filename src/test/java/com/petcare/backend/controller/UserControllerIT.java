@@ -135,6 +135,7 @@ public class UserControllerIT {
                         .andReturn();
 
         Assert.assertEquals("[]", getEmptyResult.getResponse().getContentAsString());
+        Assert.assertTrue(this.userRepository.findAll().isEmpty());
     }
 
     public String loginAndGetToken(CreateUserDTO postDTO) throws Exception {
