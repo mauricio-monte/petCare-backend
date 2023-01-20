@@ -1,6 +1,7 @@
 package com.petcare.backend.dto.dose;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.petcare.backend.util.Validator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class CreateDoseDTO {
     @NotNull
@@ -19,4 +19,14 @@ public class CreateDoseDTO {
     private Boolean isApplied;
     @NotNull
     private Long vaccineId;
+
+    public CreateDoseDTO(Date date, Boolean isApplied, Long vaccineId) {
+        Validator.validateNotNull(date);
+        Validator.validateNotNull(isApplied);
+        Validator.validateNotNull(vaccineId);
+        this.date = date;
+        this.isApplied = isApplied;
+        this.vaccineId = vaccineId;
+    }
+
 }

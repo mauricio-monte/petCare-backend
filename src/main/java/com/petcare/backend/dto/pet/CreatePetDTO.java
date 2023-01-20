@@ -28,6 +28,9 @@ public class CreatePetDTO {
     private Long userId;
 
     public CreatePetDTO(String name, String profileImage, Date birthdate, Character sex, Float weight, String species, String race, String allergies, Long userId) {
+        Validator.validateNotEmpty(name);
+        Validator.validateNotNull(sex);
+        Validator.validateNotNull(userId);
         Validator.validateIsTodayOrBefore(birthdate);
         Validator.validateCharIsMOrF(false, sex);
         Validator.validateWeight(weight);
