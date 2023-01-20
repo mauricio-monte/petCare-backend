@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class UpdatePetDTO {
     private String name;
@@ -22,7 +21,7 @@ public class UpdatePetDTO {
     private String race;
     private String allergies;
 
-    public UpdatePetDTO(String name, String profileImage, Date birthdate, Character sex, Float weight, String species, String race, String allergies, Long userId) {
+    public UpdatePetDTO(String name, String profileImage, Date birthdate, Character sex, Float weight, String species, String race, String allergies) {
         Validator.validateIsTodayOrBefore(birthdate);
         Validator.validateCharIsMOrF(true, sex);
         Validator.validateWeight(weight);

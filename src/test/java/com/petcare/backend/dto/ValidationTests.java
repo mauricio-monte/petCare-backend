@@ -1,8 +1,11 @@
 package com.petcare.backend.dto;
 
 import com.petcare.backend.dto.pet.CreatePetDTO;
+import com.petcare.backend.dto.pet.UpdatePetDTO;
 import com.petcare.backend.dto.user.CreateUserDTO;
 import com.petcare.backend.dto.user.LoginDTO;
+import com.petcare.backend.dto.user.UpdateUserDTO;
+import com.petcare.backend.dto.vaccine.CreateVaccineDTO;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -58,6 +61,16 @@ public class ValidationTests {
                 "Expected constructor to throw, but it didn't"
         );
         Assert.assertEquals(INVALID_EMAIL, thrown3.getMessage());
+    }
+
+    @Test
+    public void updateUserDTO() {
+        Exception thrown = assertThrows(
+                Exception.class,
+                () -> new UpdateUserDTO("mateus", "teste"),
+                "Expected constructor to throw, but it didn't"
+        );
+        Assert.assertEquals(INVALID_EMAIL, thrown.getMessage());
     }
 
     @Test
@@ -128,9 +141,56 @@ public class ValidationTests {
         // Invalid character
         Exception thrown3 = assertThrows(
                 Exception.class,
-                () -> new CreatePetDTO("Simas", "www", new Date("26/07/2020"),
+                () -> new UpdatePetDTO("Simas", "www", new Date("26/07/2020"),
                         Character.valueOf('g'), Float.valueOf(2), "dog",
-                        "golden retriever", "unknown", Long.valueOf(1)),
+                        "golden retriever", "unknown"),
+                "Expected constructor to throw, but it didn't"
+        );
+        Assert.assertEquals(INVALID_SEX, thrown3.getMessage());
+
+        // Invalid date
+        Exception thrown4 = assertThrows(
+                Exception.class,
+                () -> new UpdatePetDTO("Simas", "www", new Date("26/07/2025"),
+                        Character.valueOf('m'), Float.valueOf(2), "dog",
+                        "golden retriever", "unknown"),
+                "Expected constructor to throw, but it didn't"
+        );
+        Assert.assertEquals(INVALID_DATE, thrown4.getMessage());
+
+        // Invalid weight
+        Exception thrown5 = assertThrows(
+                Exception.class,
+                () -> new UpdatePetDTO("Simas", "www", new Date("26/07/2020"),
+                        Character.valueOf('m'), Float.valueOf(-1), "dog",
+                        "golden retriever", "unknown"),
+                "Expected constructor to throw, but it didn't"
+        );
+        Assert.assertEquals(INVALID_WEIGHT, thrown5.getMessage());
+    }
+
+    @Test
+    public void createVaccineDTO() {
+        // Empty description
+        Exception thrown = assertThrows(
+                Exception.class,
+                () -> new CreateVaccineDTO("", "healdog", true, Long.valueOf(1), null),
+                "Expected constructor to throw, but it didn't"
+        );
+        Assert.assertEquals(NOT_EMPTY_RESTRICTION, thrown.getMessage());
+
+        // Null description
+        Exception thrown2 = assertThrows(
+                Exception.class,
+                () -> new CreateVaccineDTO(null, "healdog", true, Long.valueOf(1), null),
+                "Expected constructor to throw, but it didn't"
+        );
+        Assert.assertEquals(NOT_EMPTY_RESTRICTION, thrown2.getMessage());
+
+        // Invalid character
+        Exception thrown3 = assertThrows(
+                Exception.class,
+                () -> new CreateVaccineDTO(null, "healdog", true, Long.valueOf(1), null),
                 "Expected constructor to throw, but it didn't"
         );
         Assert.assertEquals(INVALID_SEX, thrown3.getMessage());
@@ -154,5 +214,15 @@ public class ValidationTests {
                 "Expected constructor to throw, but it didn't"
         );
         Assert.assertEquals(INVALID_WEIGHT, thrown5.getMessage());
+
+        // Null userId
+        Exception thrownFinal = assertThrows(
+                Exception.class,
+                () -> new CreatePetDTO("Simas", "www", new Date("26/07/2020"),
+                        Character.valueOf('m'), Float.valueOf(2), "dog",
+                        "golden retriever", "unknown", null),
+                "Expected constructor to throw, but it didn't"
+        );
+        Assert.assertEquals(NOT_NULL_RESTRICTION, thrownFinal.getMessage());
     }
 }
