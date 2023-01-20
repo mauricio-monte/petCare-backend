@@ -57,7 +57,7 @@ public class VaccineControllerIT {
     private PetRepository petRepository;
 
     @Test
-    public void petControllerIntegrationTests()
+    public void vaccineControllerIntegrationTests()
             throws Exception {
 
         Pair<Long, String> utilPair = createUserLoginAndGetToken();
