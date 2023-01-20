@@ -25,7 +25,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/petcare
     username: postgres
-    password: password
+    password:
   jpa:
     show-sql: true
     hibernate:
