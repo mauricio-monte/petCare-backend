@@ -10,6 +10,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class UpdatePetDTO {
     private String name;
     private String profileImage;
@@ -20,18 +21,4 @@ public class UpdatePetDTO {
     private String species;
     private String race;
     private String allergies;
-
-    public UpdatePetDTO(String name, String profileImage, Date birthdate, Character sex, Float weight, String species, String race, String allergies) {
-        Validator.validateIsTodayOrBefore(birthdate);
-        Validator.validateCharIsMOrF(true, sex);
-        Validator.validateWeight(weight);
-        this.name = name;
-        this.profileImage = profileImage;
-        this.birthdate = birthdate;
-        this.sex = sex;
-        this.weight = weight;
-        this.species = species;
-        this.race = race;
-        this.allergies = allergies;
-    }
 }

@@ -12,6 +12,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class CreatePetDTO {
     @NotEmpty
     private String name;
@@ -26,22 +27,4 @@ public class CreatePetDTO {
     private String allergies;
     @NotNull
     private Long userId;
-
-    public CreatePetDTO(String name, String profileImage, Date birthdate, Character sex, Float weight, String species, String race, String allergies, Long userId) {
-        Validator.validateNotEmpty(name);
-        Validator.validateNotNull(sex);
-        Validator.validateNotNull(userId);
-        Validator.validateIsTodayOrBefore(birthdate);
-        Validator.validateCharIsMOrF(false, sex);
-        Validator.validateWeight(weight);
-        this.name = name;
-        this.profileImage = profileImage;
-        this.birthdate = birthdate;
-        this.sex = sex;
-        this.weight = weight;
-        this.species = species;
-        this.race = race;
-        this.allergies = allergies;
-        this.userId = userId;
-    }
 }

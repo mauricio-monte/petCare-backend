@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -40,7 +42,7 @@ public class DoseController {
     }
 
     @PostMapping
-    public ResponseEntity<Dose> createNewDose(@RequestBody CreateDoseDTO createDoseDTO) {
+    public ResponseEntity<Dose> createNewDose(@Valid @RequestBody CreateDoseDTO createDoseDTO) {
         try {
             return new ResponseEntity<>(doseService.addNewDose(createDoseDTO), HttpStatus.CREATED);
         } catch (VaccineNotFoundException vaccineNotFoundException) {
@@ -49,7 +51,7 @@ public class DoseController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Dose> updateDose(@PathVariable("id") Long doseId, @RequestBody UpdateDoseDTO updateDoseDTO) {
+    public ResponseEntity<Dose> updateDose(@NotNull @PathVariable("id") Long doseId, @Valid @RequestBody UpdateDoseDTO updateDoseDTO) {
         try {
             return new ResponseEntity<>(doseService.updateDose(doseId, updateDoseDTO), HttpStatus.OK);
         } catch (DoseNotFoundException doseNotFoundException) {
@@ -58,7 +60,7 @@ public class DoseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Dose> deleteDose(@PathVariable("id") Long doseId) {
+    public ResponseEntity<Dose> deleteDose(@NotNull @PathVariable("id") Long doseId) {
         try {
             doseService.deleteDose(doseId);
             return new ResponseEntity<>(HttpStatus.OK);

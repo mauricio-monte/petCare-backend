@@ -11,6 +11,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class CreateDoseDTO {
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
@@ -19,14 +20,4 @@ public class CreateDoseDTO {
     private Boolean isApplied;
     @NotNull
     private Long vaccineId;
-
-    public CreateDoseDTO(Date date, Boolean isApplied, Long vaccineId) {
-        Validator.validateNotNull(date);
-        Validator.validateNotNull(isApplied);
-        Validator.validateNotNull(vaccineId);
-        this.date = date;
-        this.isApplied = isApplied;
-        this.vaccineId = vaccineId;
-    }
-
 }

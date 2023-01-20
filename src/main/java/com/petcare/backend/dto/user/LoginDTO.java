@@ -11,6 +11,7 @@ import javax.validation.constraints.NotEmpty;
 
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class LoginDTO {
     @NotEmpty
@@ -20,12 +21,4 @@ public class LoginDTO {
     @NotEmpty
     @SerializedName("password")
     public String password;
-
-    public LoginDTO(String email, String password) {
-        Validator.validateNotEmpty(email);
-        Validator.validateNotEmpty(password);
-        Validator.validateEmail(email);
-        this.email = email;
-        this.password = password;
-    }
 }

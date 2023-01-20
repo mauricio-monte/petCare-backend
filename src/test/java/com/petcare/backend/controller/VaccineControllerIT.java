@@ -57,7 +57,7 @@ public class VaccineControllerIT {
     private PetRepository petRepository;
 
     @Test
-    public void petControllerIntegrationTests()
+    public void vaccineControllerIntegrationTests()
             throws Exception {
 
         Pair<Long, String> utilPair = createUserLoginAndGetToken();
@@ -156,15 +156,6 @@ public class VaccineControllerIT {
 
     public static CreateVaccineDTO getTestVaccineWithNoDosesDTO(Long petId) {
         return new CreateVaccineDTO("rabies", "healdog", true, petId, null);
-    }
-
-    public static CreateVaccineDTO getTestVaccineWithDosesDTO(Long petId) {
-        CreateDoseFromVaccineDTO dose1 = new CreateDoseFromVaccineDTO(new Date("26/07/2020"), true);
-        CreateDoseFromVaccineDTO dose2 = new CreateDoseFromVaccineDTO(new Date("15/02/2024"), false);
-        List<CreateDoseFromVaccineDTO> doses = new ArrayList<>();
-        doses.add(dose1);
-        doses.add(dose2);
-        return new CreateVaccineDTO("cancer", "dogger", false, petId, doses);
     }
 
     private Pair<Long, String> createUserLoginAndGetToken() throws Exception {

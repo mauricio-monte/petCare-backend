@@ -12,6 +12,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class CreateVaccineDTO {
     @NotEmpty
     private String description;
@@ -21,15 +22,6 @@ public class CreateVaccineDTO {
     private Long petId;
     private List<CreateDoseFromVaccineDTO> doses;
 
-    public CreateVaccineDTO(String description, String veterinaryClinic, Boolean isSingleDose, Long petId, List<CreateDoseFromVaccineDTO> doses) {
-        Validator.validateNotEmpty(description);
-        Validator.validateNotNull(petId);
-        this.description = description;
-        this.veterinaryClinic = veterinaryClinic;
-        this.isSingleDose = isSingleDose;
-        this.petId = petId;
-        this.doses = doses;
-    }
     public boolean vaccineHasDose() {
         return !(this.doses == null || this.doses.isEmpty());
     }

@@ -8,6 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 @Data
+@AllArgsConstructor
 public class CreateUserDTO {
     @NotEmpty
     private String name;
@@ -16,14 +17,4 @@ public class CreateUserDTO {
     private String email;
     @NotEmpty
     private String password;
-
-    public CreateUserDTO(String name, String email, String password) {
-        Validator.validateNotEmpty(name);
-        Validator.validateNotEmpty(email);
-        Validator.validateNotEmpty(password);
-        Validator.validateEmail(email);
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
 }

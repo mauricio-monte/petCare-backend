@@ -11,16 +11,12 @@ import javax.validation.constraints.NotEmpty;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class UpdateUserDTO {
 
     private String name;
+
     @Email
     @SerializedName("email")
     public String email;
-
-    public UpdateUserDTO(String name, String email) {
-        Validator.validateEmail(email);
-        this.name = name;
-        this.email = email;
-    }
 }
