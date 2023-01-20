@@ -56,12 +56,6 @@ public class VaccineControllerIT {
     @Autowired
     private PetRepository petRepository;
 
-    @Autowired
-    private PetService petService;
-
-    @Autowired
-    private UserRepository userRepository;
-
     @Test
     public void petControllerIntegrationTests()
             throws Exception {
@@ -81,110 +75,77 @@ public class VaccineControllerIT {
                         .header("authorization", bearerAuth)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createVaccineJson))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.description", is(createVaccineDTO.getDescription())))
-                .andExpect(jsonPath("$.veterinaryClinic", is(createVaccineDTO.getVeterinaryClinic())))
-                .andReturn();
-
-        System.out.println(createVaccineResult.getResponse().getContentAsString());
-
-        /////////////
-        // Create vaccine with doses test
-//        CreateVaccineDTO createVaccineDTO2 = getTestVaccineWithDosesDTO(petId);
-//        String createVaccineJson2 = JsonMapperUtil.fromObjectToJsonString(createVaccineDTO2);
-//
-//        MvcResult createVaccineResult2 = mvc.perform(post("/vaccines")
-//                        .header("authorization", bearerAuth)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(createVaccineJson2))
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.description", is(createVaccineDTO2.getDescription())))
-//                .andExpect(jsonPath("$.veterinaryClinic", is(createVaccineDTO2.getVeterinaryClinic())))
-//                .andReturn();
-//
-//        System.out.println(createVaccineResult2.getResponse().getContentAsString());
-        //////
-
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.description", is(createVaccineDTO.getDescription())))
+                        .andExpect(jsonPath("$.veterinaryClinic", is(createVaccineDTO.getVeterinaryClinic())))
+                        .andReturn();
 
         Vaccine createdVaccine = JsonMapperUtil.fromJsonStringToObject(createVaccineResult.getResponse().getContentAsString(), Vaccine.class);
         int createdVaccineId = Math.toIntExact(createdVaccine.getId());
         Assert.assertEquals(createVaccineDTO.getDescription(),createdVaccine.getDescription());
 
 
-//        // Get one pet test
-//        MvcResult getOneResult = mvc.perform(get("/vaccine/" + createdVaccineId)
-//                        .header("authorization", bearerAuth)
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(content()
-//                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.id", is(createdVaccineId)))
-//                .andExpect(jsonPath("$.description", is(createdVaccine.getDescription())))
-//                .andReturn();
-//
-//        System.out.println(getOneResult.getResponse().getContentAsString());
-//        Vaccine getOneVaccine = JsonMapperUtil.fromJsonStringToObject(getOneResult.getResponse().getContentAsString(), Vaccine.class);
-//        Assert.assertEquals(createdVaccine, getOneVaccine);
-//
-//
-        // Get all pets test
-        MvcResult getAllResult = mvc.perform(get("/vaccine/" + petId)
+        // Get one pet test
+        MvcResult getOneResult = mvc.perform(get("/vaccines/" + createdVaccineId)
                         .header("authorization", bearerAuth)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content()
+                        .andExpect(status().isOk())
+                        .andExpect(content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$[0].id", is(createdPetId)))
-//                .andExpect(jsonPath("$[0].name", is(createdPet.getName())))
-//                .andExpect(jsonPath("$[0].race", is(createdPet.getRace())))
-                .andReturn();
+                        .andReturn();
 
-        System.out.println(getAllResult.getResponse().getContentAsString());
-//
-//
-//        // Update pet test
-//        Pet updatedPet = new Pet(createPetDTO);
-//        updatedPet.setName("marvin");
-//        updatedPet.setRace("german shepherd");
-//        String updatedPetJson = JsonMapperUtil.fromObjectToJsonString(updatedPet);
-//
-//        mvc.perform(patch("/pets/" + createdPetId)
-//                        .header("authorization", bearerAuth)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(updatedPetJson))
-//                .andExpect(status().isOk())
-//                .andExpect(content()
-//                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.id", is(createdPetId)))
-//                .andExpect(jsonPath("$.name", is(updatedPet.getName())))
-//                .andExpect(jsonPath("$.race", is(updatedPet.getRace())));
-//
-//        MvcResult getUpdatedResult = mvc.perform(get("/pets/" + createdPetId)
-//                        .header("authorization", bearerAuth)
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.id", is(createdPetId)))
-//                .andExpect(jsonPath("$.name", is(updatedPet.getName())))
-//                .andExpect(jsonPath("$.race", is(updatedPet.getRace())))
-//                .andReturn();
-//
-//        System.out.println(getUpdatedResult.getResponse().getContentAsString());
-//        Pet getUpdatedPet = JsonMapperUtil.fromJsonStringToObject(getUpdatedResult.getResponse().getContentAsString(), Pet.class);
-//        Assert.assertEquals(updatedPet.getName(), getUpdatedPet.getName());
-//        Assert.assertEquals(updatedPet.getRace(), getUpdatedPet.getRace());
-//
-//
-//        // Delete pet test
-//        mvc.perform(delete("/pets/" + createdPetId)
-//                        .header("authorization", bearerAuth)
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk());
-//
-//        MvcResult getEmptyResult = mvc.perform(get("/pets")
-//                        .header("authorization", bearerAuth)
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andReturn();
-//
-//        Assert.assertEquals("[]", getEmptyResult.getResponse().getContentAsString());
+        System.out.println(getOneResult.getResponse().getContentAsString());
+        Vaccine getOneVaccine = JsonMapperUtil.fromJsonStringToObject(getOneResult.getResponse().getContentAsString(), Vaccine.class);
+        Assert.assertEquals(createdVaccine, getOneVaccine);
+
+
+        // Get all pets test
+        MvcResult getAllResult = mvc.perform(get("/vaccines")
+                        .header("authorization", bearerAuth)
+                        .param("petId", String.valueOf(petId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$[0].id", is(createdVaccineId)))
+                        .andExpect(jsonPath("$[0].description", is(createdVaccine.getDescription())))
+                        .andReturn();
+
+
+        // Update pet test
+        Vaccine updatedVaccine = new Vaccine(createVaccineDTO);
+        updatedVaccine.setDescription("scabies");
+        String updatedVaccineJson = JsonMapperUtil.fromObjectToJsonString(updatedVaccine);
+
+        mvc.perform(patch("/vaccines/" + createdVaccineId)
+                        .header("authorization", bearerAuth)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatedVaccineJson))
+                        .andExpect(status().isOk())
+                        .andExpect(content()
+                        .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.id", is(createdVaccineId)))
+                .andExpect(jsonPath("$.description", is(updatedVaccine.getDescription())));
+
+        MvcResult getUpdatedResult = mvc.perform(get("/vaccines/" + createdVaccineId)
+                        .header("authorization", bearerAuth)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$.id", is(createdVaccineId)))
+                        .andExpect(jsonPath("$.description", is(updatedVaccine.getDescription())))
+                        .andReturn();
+
+        Vaccine getUpdatedVaccine = JsonMapperUtil.fromJsonStringToObject(getUpdatedResult.getResponse().getContentAsString(), Vaccine.class);
+        Assert.assertEquals(updatedVaccine.getDescription(), getUpdatedVaccine.getDescription());
+
+
+
+        // Delete pet test
+        mvc.perform(delete("/vaccines/" + createdVaccineId)
+                        .header("authorization", bearerAuth)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk());
+
+        Assert.assertTrue(this.vaccineRepository.findAll().isEmpty());
     }
 
     public static CreatePetDTO getTestPetDTO(Long userId) {
@@ -236,14 +197,5 @@ public class VaccineControllerIT {
     private Pet createPetAndGetId(Long userId, String bearerAuth) throws Exception {
         CreatePetDTO createPetDTO = PetControllerIT.getTestPetDTO(userId);
         return this.petRepository.save(new Pet(createPetDTO));
-//        String createPetJson = JsonMapperUtil.fromObjectToJsonString(createPetDTO);
-//
-//        MvcResult createPetResult = mvc.perform(post("/pets")
-//                        .header("authorization", bearerAuth)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(createPetJson))
-//                        .andReturn();
-//
-//        return JsonMapperUtil.fromJsonStringToObject(createPetResult.getResponse().getContentAsString(), Pet.class);
     }
 }
