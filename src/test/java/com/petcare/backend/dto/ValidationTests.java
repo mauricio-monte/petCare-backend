@@ -1,5 +1,7 @@
 package com.petcare.backend.dto;
 
+import com.petcare.backend.dto.dose.CreateDoseDTO;
+import com.petcare.backend.dto.dose.CreateDoseFromVaccineDTO;
 import com.petcare.backend.dto.pet.CreatePetDTO;
 import com.petcare.backend.dto.pet.UpdatePetDTO;
 import com.petcare.backend.dto.user.CreateUserDTO;
@@ -139,34 +141,34 @@ public class ValidationTests {
     @Test
     public void updatePetDTO() {
         // Invalid character
-        Exception thrown3 = assertThrows(
+        Exception thrown = assertThrows(
                 Exception.class,
                 () -> new UpdatePetDTO("Simas", "www", new Date("26/07/2020"),
                         Character.valueOf('g'), Float.valueOf(2), "dog",
                         "golden retriever", "unknown"),
                 "Expected constructor to throw, but it didn't"
         );
-        Assert.assertEquals(INVALID_SEX, thrown3.getMessage());
+        Assert.assertEquals(INVALID_SEX, thrown.getMessage());
 
         // Invalid date
-        Exception thrown4 = assertThrows(
+        Exception thrown2 = assertThrows(
                 Exception.class,
                 () -> new UpdatePetDTO("Simas", "www", new Date("26/07/2025"),
                         Character.valueOf('m'), Float.valueOf(2), "dog",
                         "golden retriever", "unknown"),
                 "Expected constructor to throw, but it didn't"
         );
-        Assert.assertEquals(INVALID_DATE, thrown4.getMessage());
+        Assert.assertEquals(INVALID_DATE, thrown2.getMessage());
 
         // Invalid weight
-        Exception thrown5 = assertThrows(
+        Exception thrown3 = assertThrows(
                 Exception.class,
                 () -> new UpdatePetDTO("Simas", "www", new Date("26/07/2020"),
                         Character.valueOf('m'), Float.valueOf(-1), "dog",
                         "golden retriever", "unknown"),
                 "Expected constructor to throw, but it didn't"
         );
-        Assert.assertEquals(INVALID_WEIGHT, thrown5.getMessage());
+        Assert.assertEquals(INVALID_WEIGHT, thrown3.getMessage());
     }
 
     @Test
@@ -187,42 +189,39 @@ public class ValidationTests {
         );
         Assert.assertEquals(NOT_EMPTY_RESTRICTION, thrown2.getMessage());
 
-        // Invalid character
+        // Null petId
         Exception thrown3 = assertThrows(
+                Exception.class,
+                () -> new CreateVaccineDTO("rabies", "healdog", true, null, null),
+                "Expected constructor to throw, but it didn't"
+        );
+        Assert.assertEquals(NOT_NULL_RESTRICTION, thrown3.getMessage());
+    }
+
+    @Test
+    public void createDoseDTO() {
+        // Null date
+        Exception thrown = assertThrows(
+                Exception.class,
+                () -> new CreateDoseDTO(null, true, Long.valueOf(1)),
+                "Expected constructor to throw, but it didn't"
+        );
+        Assert.assertEquals(NOT_NULL_RESTRICTION, thrown.getMessage());
+
+        // Null description
+        Exception thrown2 = assertThrows(
                 Exception.class,
                 () -> new CreateVaccineDTO(null, "healdog", true, Long.valueOf(1), null),
                 "Expected constructor to throw, but it didn't"
         );
-        Assert.assertEquals(INVALID_SEX, thrown3.getMessage());
+        Assert.assertEquals(NOT_EMPTY_RESTRICTION, thrown2.getMessage());
 
-        // Invalid date
-        Exception thrown4 = assertThrows(
+        // Null petId
+        Exception thrown3 = assertThrows(
                 Exception.class,
-                () -> new CreatePetDTO("Simas", "www", new Date("26/07/2025"),
-                        Character.valueOf('m'), Float.valueOf(2), "dog",
-                        "golden retriever", "unknown", Long.valueOf(1)),
+                () -> new CreateVaccineDTO("rabies", "healdog", true, null, null),
                 "Expected constructor to throw, but it didn't"
         );
-        Assert.assertEquals(INVALID_DATE, thrown4.getMessage());
-
-        // Invalid weight
-        Exception thrown5 = assertThrows(
-                Exception.class,
-                () -> new CreatePetDTO("Simas", "www", new Date("26/07/2020"),
-                        Character.valueOf('m'), Float.valueOf(-1), "dog",
-                        "golden retriever", "unknown", Long.valueOf(1)),
-                "Expected constructor to throw, but it didn't"
-        );
-        Assert.assertEquals(INVALID_WEIGHT, thrown5.getMessage());
-
-        // Null userId
-        Exception thrownFinal = assertThrows(
-                Exception.class,
-                () -> new CreatePetDTO("Simas", "www", new Date("26/07/2020"),
-                        Character.valueOf('m'), Float.valueOf(2), "dog",
-                        "golden retriever", "unknown", null),
-                "Expected constructor to throw, but it didn't"
-        );
-        Assert.assertEquals(NOT_NULL_RESTRICTION, thrownFinal.getMessage());
+        Assert.assertEquals(NOT_NULL_RESTRICTION, thrown3.getMessage());
     }
 }

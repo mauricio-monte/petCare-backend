@@ -22,8 +22,8 @@ public class CreateVaccineDTO {
     private List<CreateDoseFromVaccineDTO> doses;
 
     public CreateVaccineDTO(String description, String veterinaryClinic, Boolean isSingleDose, Long petId, List<CreateDoseFromVaccineDTO> doses) {
-        Validator.validateNotEmpty(description);
-        Validator.validateNotNull(petId);
+//        Validator.validateNotEmpty(description);
+//        Validator.validateNotNull(petId);
         this.description = description;
         this.veterinaryClinic = veterinaryClinic;
         this.isSingleDose = isSingleDose;

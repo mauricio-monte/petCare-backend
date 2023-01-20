@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -40,7 +41,7 @@ public class VaccineController {
     }
 
     @PostMapping
-    public ResponseEntity<Vaccine> createNewVaccine(@RequestBody CreateVaccineDTO createVaccineDTO) {
+    public ResponseEntity<Vaccine> createNewVaccine(@RequestBody @Valid CreateVaccineDTO createVaccineDTO) {
         try {
             return new ResponseEntity<>(vaccineService.addNewVaccine(createVaccineDTO), HttpStatus.CREATED);
         } catch (PetNotFoundException petNotFoundException) {
