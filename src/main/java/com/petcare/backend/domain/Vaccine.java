@@ -6,6 +6,7 @@ import com.petcare.backend.dto.vaccine.CreateVaccineDTO;
 import com.petcare.backend.dto.vaccine.UpdateVaccineDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode
 public class Vaccine {
     @Id
     @SequenceGenerator(name = "vaccine_sequence", sequenceName = "vaccine_sequence", allocationSize = 1)
