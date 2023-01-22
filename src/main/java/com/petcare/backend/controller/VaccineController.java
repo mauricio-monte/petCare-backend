@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -50,7 +51,7 @@ public class VaccineController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Vaccine> updateVaccine(@PathVariable("id") Long vaccineId, @RequestBody UpdateVaccineDTO updateVaccineDTO) {
+    public ResponseEntity<Vaccine> updateVaccine(@NotNull @PathVariable("id") Long vaccineId, @Valid @RequestBody UpdateVaccineDTO updateVaccineDTO) {
         try {
             return new ResponseEntity<>(vaccineService.updateVaccine(vaccineId, updateVaccineDTO), HttpStatus.OK);
         } catch (VaccineNotFoundException vaccineException) {
@@ -59,7 +60,7 @@ public class VaccineController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Vaccine> deleteVaccine(@PathVariable("id") Long vaccineId) {
+    public ResponseEntity<Vaccine> deleteVaccine(@NotNull @PathVariable("id") Long vaccineId) {
         try {
             vaccineService.deleteVaccine(vaccineId);
             return new ResponseEntity<>(HttpStatus.OK);

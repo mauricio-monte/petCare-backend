@@ -18,6 +18,7 @@ import com.petcare.backend.util.UrlConstants;
 import lombok.AllArgsConstructor;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping(path = UrlConstants.PET_URL)
@@ -53,7 +54,7 @@ public class PetController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Pet> updatePet(@Valid @PathVariable("id") Long petId, @RequestBody UpdatePetDTO pet) {
+    public ResponseEntity<Pet> updatePet(@NotNull @PathVariable("id") Long petId, @Valid @RequestBody UpdatePetDTO pet) {
         try {
             return new ResponseEntity<>(petService.updatePet(petId, pet), HttpStatus.OK);
         } catch (PetNotFoundException petException) {
@@ -62,7 +63,7 @@ public class PetController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Pet> deletePet(@PathVariable("id") Long petId) {
+    public ResponseEntity<Pet> deletePet(@NotNull @PathVariable("id") Long petId) {
         try {
             petService.deletePet(petId);
             return new ResponseEntity<>(HttpStatus.OK);
