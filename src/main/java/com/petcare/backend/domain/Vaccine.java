@@ -35,6 +35,12 @@ public class Vaccine {
     @Column(name = "is_single_dose", nullable = false)
     private Boolean isSingleDose = false;
 
+    @PrePersist
+    void preInsert() {
+        if (this.isSingleDose == null)
+            this.isSingleDose = false;
+    }
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", referencedColumnName = "id")
