@@ -48,6 +48,11 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
     public void updateUser(UpdateUserDTO userDTO) {
         if (userDTO.getName() != null) this.name = userDTO.getName();
         if (userDTO.getEmail() != null) this.email = userDTO.getEmail();

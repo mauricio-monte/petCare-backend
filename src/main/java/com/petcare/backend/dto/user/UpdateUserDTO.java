@@ -1,13 +1,22 @@
 package com.petcare.backend.dto.user;
 
+import com.google.gson.annotations.SerializedName;
+import com.petcare.backend.util.Validator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class UpdateUserDTO {
+
     private String name;
-    private String email;
+
+    @Email
+    @SerializedName("email")
+    public String email;
 }
