@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 public class AuthController {
 
@@ -31,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginReturnDTO login(@RequestBody LoginDTO userLogin) throws UserNotFoundException {
+    public LoginReturnDTO login(@Valid @RequestBody LoginDTO userLogin) throws UserNotFoundException {
         var authenticationToken = new UsernamePasswordAuthenticationToken(userLogin.getEmail(), userLogin.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         LOG.debug("Token requested for user: '{}'", userLogin.getEmail());

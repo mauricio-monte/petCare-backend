@@ -158,15 +158,6 @@ public class VaccineControllerIT {
         return new CreateVaccineDTO("rabies", "healdog", true, petId, null);
     }
 
-    public static CreateVaccineDTO getTestVaccineWithDosesDTO(Long petId) {
-        CreateDoseFromVaccineDTO dose1 = new CreateDoseFromVaccineDTO(new Date("26/07/2020"), true);
-        CreateDoseFromVaccineDTO dose2 = new CreateDoseFromVaccineDTO(new Date("15/02/2024"), false);
-        List<CreateDoseFromVaccineDTO> doses = new ArrayList<>();
-        doses.add(dose1);
-        doses.add(dose2);
-        return new CreateVaccineDTO("cancer", "dogger", false, petId, doses);
-    }
-
     private Pair<Long, String> createUserLoginAndGetToken() throws Exception {
         CreateUserDTO createUserDTO = new CreateUserDTO("test", "test@gmail.com", "test_password");
         String createUserJson = JsonMapperUtil.fromObjectToJsonString(createUserDTO);

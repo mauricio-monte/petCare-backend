@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -28,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createNewUser(@RequestBody CreateUserDTO postDTO) {
+    public ResponseEntity<User> createNewUser(@Valid @RequestBody CreateUserDTO postDTO) {
         try {
             return new ResponseEntity<>(userService.addNewUser(postDTO), HttpStatus.CREATED);
         } catch (EmailAlreadyRegisteredException | UsernameAlreadyRegisteredException conflictException) {
@@ -46,7 +49,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long userId, @RequestBody UpdateUserDTO userDTO) {
+    public ResponseEntity<User> updateUser(@NotNull @PathVariable("id") Long userId, @Valid @RequestBody UpdateUserDTO userDTO) {
         try {
             return new ResponseEntity<>(userService.updateUser(userId, userDTO), HttpStatus.OK);
         } catch (UserNotFoundException updateException) {
@@ -55,7 +58,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable("id") Long userId) {
+    public ResponseEntity<User> deleteUser(@NotNull @PathVariable("id") Long userId) {
         try {
             userService.deleteUser(userId);
             return new ResponseEntity<>(HttpStatus.OK);

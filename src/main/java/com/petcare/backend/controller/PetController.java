@@ -17,6 +17,9 @@ import com.petcare.backend.util.UrlConstants;
 
 import lombok.AllArgsConstructor;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 @RestController
 @RequestMapping(path = UrlConstants.PET_URL)
 @AllArgsConstructor
@@ -42,7 +45,7 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<Pet> createNewPet(@RequestBody CreatePetDTO createPetDTO) {
+    public ResponseEntity<Pet> createNewPet(@Valid @RequestBody CreatePetDTO createPetDTO) {
         try {
             return new ResponseEntity<>(petService.addNewPet(createPetDTO), HttpStatus.CREATED);
         } catch (UserNotFoundException userNotFoundException) {
@@ -51,7 +54,7 @@ public class PetController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Pet> updatePet(@PathVariable("id") Long petId, @RequestBody UpdatePetDTO pet) {
+    public ResponseEntity<Pet> updatePet(@NotNull @PathVariable("id") Long petId, @Valid @RequestBody UpdatePetDTO pet) {
         try {
             return new ResponseEntity<>(petService.updatePet(petId, pet), HttpStatus.OK);
         } catch (PetNotFoundException petException) {
@@ -60,7 +63,7 @@ public class PetController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Pet> deletePet(@PathVariable("id") Long petId) {
+    public ResponseEntity<Pet> deletePet(@NotNull @PathVariable("id") Long petId) {
         try {
             petService.deletePet(petId);
             return new ResponseEntity<>(HttpStatus.OK);
