@@ -1,7 +1,7 @@
 package com.petcare.backend.util;
 
 import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.regex.Pattern;
 
 public class Validator {
@@ -14,10 +14,10 @@ public class Validator {
     public static final String INVALID_EMAIL = "invalid_email_restriction";
 
 
-    public static void validateIsTodayOrBefore(Date date) {
+    public static void validateIsTodayOrBefore(LocalDate date) {
         if (date != null) {
-            Date now = Date.from(Instant.now());
-            if (date.after(now)) {
+            LocalDate now = LocalDate.from(Instant.now());
+            if (date.isAfter(now)) {
                 throw new RuntimeException(INVALID_DATE);
             }
         }
