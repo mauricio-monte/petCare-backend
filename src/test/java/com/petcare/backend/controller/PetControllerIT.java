@@ -24,6 +24,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -48,7 +50,7 @@ public class PetControllerIT {
     @Test
     public void petControllerIntegrationTests()
             throws Exception {
-
+    
         Pair<Long, String> utilPair = createUserLoginAndGetToken();
         Long userId = utilPair.getFirst();
         String bearerAuth = utilPair.getSecond();
@@ -151,7 +153,8 @@ public class PetControllerIT {
     }
 
     public static CreatePetDTO getTestPetDTO(Long userId) {
-        return new CreatePetDTO("simas", "www", new Date("26/07/2020"),
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return new CreatePetDTO("simas", "www", LocalDate.parse("26/07/2020", formatter),
                 Character.valueOf('m'), Float.valueOf(2), "dog",
                 "golden retriever", "unknown", userId);
     }

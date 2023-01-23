@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -26,8 +27,7 @@ public class Dose {
 
     @Column(name = "date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
-    @Temporal(TemporalType.DATE)
-    private Date date;
+    private LocalDate date;
 
     @Column(name = "is_applied", nullable = false)
     private Boolean isApplied = false;
