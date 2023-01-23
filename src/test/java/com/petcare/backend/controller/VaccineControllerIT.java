@@ -30,9 +30,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -149,7 +148,8 @@ public class VaccineControllerIT {
     }
 
     public static CreatePetDTO getTestPetDTO(Long userId) {
-        return new CreatePetDTO("simas", "www", new Date("26/07/2020"),
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return new CreatePetDTO("simas", "www", LocalDate.parse("26/07/2020", formatter),
                 Character.valueOf('m'), Float.valueOf(2), "dog",
                 "golden retriever", "unknown", userId);
     }
