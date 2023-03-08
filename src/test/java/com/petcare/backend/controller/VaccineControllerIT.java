@@ -155,7 +155,7 @@ public class VaccineControllerIT {
     }
 
     public static CreateVaccineDTO getTestVaccineWithNoDosesDTO(Long petId) {
-        return new CreateVaccineDTO("rabies", "healdog", true, petId, null);
+        return new CreateVaccineDTO("rabies", "healdog", petId, null);
     }
 
     private Pair<Long, String> createUserLoginAndGetToken() throws Exception {

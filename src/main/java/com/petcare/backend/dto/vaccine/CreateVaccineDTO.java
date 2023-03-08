@@ -17,7 +17,6 @@ public class CreateVaccineDTO {
     @NotEmpty
     private String description;
     private String veterinaryClinic;
-    private Boolean isSingleDose;
     @NotNull
     private Long petId;
     private List<CreateDoseFromVaccineDTO> doses;

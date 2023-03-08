@@ -32,15 +32,6 @@ public class Vaccine {
     @Column(name = "veterinary_clinic")
     private String veterinaryClinic;
 
-    @Column(name = "is_single_dose", nullable = false)
-    private Boolean isSingleDose = false;
-
-    @PrePersist
-    void preInsert() {
-        if (this.isSingleDose == null)
-            this.isSingleDose = false;
-    }
-
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", referencedColumnName = "id")
@@ -53,13 +44,11 @@ public class Vaccine {
     public Vaccine(CreateVaccineDTO vaccineDTO) {
         this.description = vaccineDTO.getDescription();
         this.veterinaryClinic = vaccineDTO.getVeterinaryClinic();
-        this.isSingleDose = vaccineDTO.getIsSingleDose();
     }
 
     public void updateVaccine(UpdateVaccineDTO updatedVaccine) {
         if (updatedVaccine.getDescription() != null) this.description = updatedVaccine.getDescription();
         if (updatedVaccine.getVeterinaryClinic() != null) this.veterinaryClinic = updatedVaccine.getVeterinaryClinic();
-        if (updatedVaccine.getIsSingleDose() != null) this.isSingleDose = updatedVaccine.getIsSingleDose();
     }
 
     public void addDose(Dose dose) {
