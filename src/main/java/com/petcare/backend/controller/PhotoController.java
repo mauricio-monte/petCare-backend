@@ -53,7 +53,7 @@ public class PhotoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Pet> deletePhoto(@NotNull @PathVariable("id") Long photoId) {
+    public ResponseEntity<Photo> deletePhoto(@NotNull @PathVariable("id") Long photoId) {
         try {
             photoService.deletePhoto(photoId);
             return new ResponseEntity<>(HttpStatus.OK);
