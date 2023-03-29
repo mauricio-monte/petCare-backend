@@ -5,6 +5,7 @@ import com.petcare.backend.dto.photo.PhotoDTO;
 import com.petcare.backend.dto.photo.UpdatePhotoDTO;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotEmpty;
 @Table(name = "photos")
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class Photo {
 
     @Id
