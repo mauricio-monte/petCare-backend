@@ -1,13 +1,19 @@
 package com.petcare.backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.petcare.backend.dto.photo.PetPhotoDTO;
+import com.petcare.backend.dto.photo.PhotoDTO;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
-public class PetPhoto {
+@Entity
+@Table(name = "photos")
+@NoArgsConstructor
+@AllArgsConstructor
+public class Photo {
 
     @Id
     @SequenceGenerator(name = "photo_sequence", sequenceName = "photo_sequence", allocationSize = 1)
@@ -28,13 +34,13 @@ public class PetPhoto {
     @JoinColumn(name = "pet_id", referencedColumnName = "id")
     private Pet pet;
 
-    public PetPhoto(String photo, String description) {
+    public Photo(String photo, String description) {
         this.photo = photo;
         this.description = description;
     }
 
-    public PetPhoto(PetPhotoDTO petPhotoDTO) {
-        this(petPhotoDTO.getPhoto(), petPhotoDTO.getDescription());
+    public Photo(PhotoDTO photoDTO) {
+        this(photoDTO.getPhoto(), photoDTO.getDescription());
     }
 
     public void setPet(Pet pet) {
