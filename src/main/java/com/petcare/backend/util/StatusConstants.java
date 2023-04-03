@@ -13,4 +13,5 @@ public class StatusConstants {
     public static final String PET_NOT_FOUND_STATUS = "pet_not_found";
     public static final String VACCINE_NOT_FOUND_STATUS = "vaccine_not_found";
     public static final String DOSE_NOT_FOUND_STATUS = "dose_not_found";
+    public static final String PHOTO_NOT_FOUND_STATUS = "photo_not_found";
 }
