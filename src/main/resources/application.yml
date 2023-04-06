@@ -11,6 +11,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+        jdbc:
+          lob:
+            non-contextual-creation: true
 
 server:
   error:
@@ -25,11 +28,15 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/petcare
     username: postgres
-    password:
+    password: password
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update # Options: (none, validate, update, create-drop)
+      ddl-auto: create-drop # Options: (none, validate, update, create-drop)
+      jdbc:
+        lob:
+          non-contextual-creation: true
+
 
 ---
 
@@ -45,3 +52,7 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: validate
+      jdbc:
+        lob:
+          non-contextual-creation: true
+
