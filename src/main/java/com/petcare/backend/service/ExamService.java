@@ -11,6 +11,8 @@ import com.petcare.backend.exception.PetNotFoundException;
 import com.petcare.backend.repository.ExamFileRepository;
 import com.petcare.backend.repository.ExamRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;

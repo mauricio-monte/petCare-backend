@@ -11,9 +11,9 @@ import com.petcare.backend.exception.PetNotFoundException;
 import com.petcare.backend.service.ExamService;
 import com.petcare.backend.util.UrlConstants;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -74,13 +74,20 @@ public class ExamController {
     }
 
     @GetMapping("/exam_file/{id}")
-    public ResponseEntity<byte[]> getExamFileById(@NotNull @PathVariable("id") Long examFileId) {
+    public ResponseEntity<Resource> getExamFileById(@NotNull @PathVariable("id") Long examFileId) {
         try {
             ExamFile examFile = this.examService.getExamFileById(examFileId);
+            ByteArrayResource resource = new ByteArrayResource(examFile.getData());
 
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + examFile.getFileName() + "\"")
-                    .body(examFile.getData());
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .contentLength(resource.contentLength())
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            ContentDisposition.attachment()
+                                    .filename(examFile.getFileName())
+                                    .build().toString())
+                    .body(resource);
+
 
         } catch (ExamFileNotFoundException examFileNotFoundException) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, examFileNotFoundException.getMessage(), examFileNotFoundException);
