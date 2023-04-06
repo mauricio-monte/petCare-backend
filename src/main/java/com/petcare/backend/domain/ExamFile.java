@@ -26,6 +26,9 @@ public class ExamFile {
     @Column(name = "exam_file_name")
     private String fileName;
 
+    @Column(name = "exam_file_type")
+    private String fileType;
+
     @Lob
     @Column(name = "exam_file_data")
     private byte[] data;
@@ -36,8 +39,9 @@ public class ExamFile {
     @JoinColumn(name = "exam_id", referencedColumnName = "id")
     private Exam exam;
 
-    public ExamFile(String fileName, byte[] data) {
+    public ExamFile(String fileName, String fileType, byte[] data) {
         this.fileName = fileName;
+        this.fileType = fileType;
         this.data = data;
     }
 

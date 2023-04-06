@@ -3,6 +3,7 @@ package com.petcare.backend.service;
 import com.petcare.backend.domain.Exam;
 import com.petcare.backend.domain.ExamFile;
 import com.petcare.backend.domain.Pet;
+import com.petcare.backend.domain.Photo;
 import com.petcare.backend.dto.exam.ExamDTO;
 import com.petcare.backend.exception.ExamFileNotFoundException;
 import com.petcare.backend.exception.ExamNotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +35,15 @@ public class ExamService {
         return this.examRepository.save(exam);
     }
 
+    public ExamFile addExamFile(Long examId, MultipartFile multipartFile) throws IOException, ExamNotFoundException {
+        Exam exam = this.getExamById(examId);
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        ExamFile examFile = new ExamFile(fileName, multipartFile.getContentType(), multipartFile.getBytes());
+        examFile.setExam(exam);
+
+        return examFileRepository.save(examFile);
+    }
+
     public Exam getExamById(Long examId) throws ExamNotFoundException {
         Optional<Exam> optionalExam = this.examRepository.findById(examId);
 
@@ -43,15 +54,6 @@ public class ExamService {
         }
     }
 
-    public ExamFile addExamFile(Long examId, MultipartFile multipartFile) throws IOException, ExamNotFoundException {
-        Exam exam = this.getExamById(examId);
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        ExamFile examFile = new ExamFile(fileName, multipartFile.getBytes());
-        examFile.setExam(exam);
-
-        return examFileRepository.save(examFile);
-    }
-
     public ExamFile getExamFileById(Long examFileId) throws ExamFileNotFoundException {
         Optional<ExamFile> examFileOptional = examFileRepository.findById(examFileId);
 
@@ -60,5 +62,15 @@ public class ExamService {
         } else {
             throw new ExamFileNotFoundException();
         }
+    }
+
+    public List<Exam> getAllExamsByPet(Long petId) throws PetNotFoundException {
+        Pet pet = this.petService.getPetById(petId);
+        return this.examRepository.findAllByPet(pet);
+    }
+
+    public List<ExamFile> getAllFilesByExam(Long examID) throws ExamNotFoundException {
+        Exam exam = this.getExamById(examID);
+        return this.examFileRepository.findAllByExam(exam);
     }
 }
