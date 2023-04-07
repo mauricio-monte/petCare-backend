@@ -5,6 +5,6 @@ import com.petcare.backend.util.StatusConstants;
 public class ExamNotFoundException extends Exception {
 
     public ExamNotFoundException() {
-        super(StatusConstants.EXAM_FILE_NOT_FOUND_STATUS);
+        super(StatusConstants.EXAM_NOT_FOUND_STATUS);
     }
 }
