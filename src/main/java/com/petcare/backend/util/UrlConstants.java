@@ -6,4 +6,7 @@ public class UrlConstants {
     public static final String PET_URL = "pets";
     public static final String DOSE_URL = "doses";
     public static final String PHOTO_URL = "photos";
+    public static final String EXAM_URL = "exams";
+
+    public static final String EXAM_FILE_URL = "exams";
 }

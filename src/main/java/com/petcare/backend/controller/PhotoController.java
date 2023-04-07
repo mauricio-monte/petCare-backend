@@ -26,7 +26,7 @@ public class PhotoController {
     private PhotoService photoService;
 
     @GetMapping
-    public ResponseEntity<List<Photo>> getPhotosByPet(@RequestParam(required = false) Long petId) {
+    public ResponseEntity<List<Photo>> getPhotosByPet(@RequestParam Long petId) {
         try {
             return new ResponseEntity<>(this.photoService.getAllPhotosByPet(petId), HttpStatus.OK);
         } catch (PetNotFoundException petNotFoundException) {
