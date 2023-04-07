@@ -45,4 +45,8 @@ public class ExamFile {
         this.data = data;
     }
 
+    public Long getExamId() {
+        return this.exam.getId();
+    }
+
 }

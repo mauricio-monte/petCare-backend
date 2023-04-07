@@ -2,9 +2,8 @@ package com.petcare.backend.controller;
 
 import com.petcare.backend.domain.Exam;
 import com.petcare.backend.domain.ExamFile;
-import com.petcare.backend.domain.Photo;
 import com.petcare.backend.dto.exam.ExamDTO;
-import com.petcare.backend.dto.exam.ExamFileResponseDTO;
+import com.petcare.backend.dto.exam.examFile.ExamFileViewDTO;
 import com.petcare.backend.exception.ExamFileNotFoundException;
 import com.petcare.backend.exception.ExamNotFoundException;
 import com.petcare.backend.exception.PetNotFoundException;
@@ -17,13 +16,11 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.petcare.backend.util.StatusConstants.INTERNAL_IO_ERROR_STATUS;
 
@@ -44,8 +41,8 @@ public class ExamController {
     }
 
     @PostMapping("/exam_file")
-    public ResponseEntity<ExamFile> addExamFile(@NotNull @RequestParam Long examId,
-                                                @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<ExamFileViewDTO> addExamFile(@NotNull @RequestParam Long examId,
+                                                       @RequestParam("file") MultipartFile file) {
         try {
             return new ResponseEntity<>(examService.addExamFile(examId, file), HttpStatus.CREATED);
         } catch (ExamNotFoundException examNotFoundException) {
@@ -73,6 +70,15 @@ public class ExamController {
         }
     }
 
+    @GetMapping("/exam_files")
+    public ResponseEntity<List<ExamFileViewDTO>> getExamFiles(@RequestParam Long examId) {
+        try {
+            return new ResponseEntity<>(this.examService.getAllFilesByExam(examId), HttpStatus.OK);
+        } catch (ExamNotFoundException examNotFoundException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, examNotFoundException.getMessage(), examNotFoundException);
+        }
+    }
+
     @GetMapping("/exam_file/{id}")
     public ResponseEntity<Resource> getExamFileById(@NotNull @PathVariable("id") Long examFileId) {
         try {
@@ -93,25 +99,4 @@ public class ExamController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, examFileNotFoundException.getMessage(), examFileNotFoundException);
         }
     }
-
-
-
-//    @GetMapping
-//    public ResponseEntity<List<ExamFile>> getFilesByExam(@RequestParam Long examId) {
-//        try {
-//            List<ExamFileResponseDTO> responseFiles = this.examService.getAllFilesByExam(examId).map(examFile -> {
-//                String fileDownloadUri = ServletUriComponentsBuilder
-//                        .fromCurrentContextPath()
-//                        .path("/files/")
-//                        .path(examFile.getId())
-//
-//            }).collect(Collectors.toList());
-//            return new ResponseEntity<>(this.examService.getAllFilesByExam(), HttpStatus.OK);
-//        } catch (PetNotFoundException petNotFoundException) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, petNotFoundException.getMessage(), petNotFoundException);
-//        } catch (ExamNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
 }

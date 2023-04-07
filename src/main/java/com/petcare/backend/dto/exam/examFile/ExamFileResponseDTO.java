@@ -1,4 +1,4 @@
-package com.petcare.backend.dto.exam;
+package com.petcare.backend.dto.exam.examFile;
 
 import com.petcare.backend.domain.ExamFile;
 import lombok.AllArgsConstructor;
