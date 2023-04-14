@@ -81,7 +81,7 @@ public class ExamService {
         Exam exam = this.getExamById(examID);
         List<ExamFileViewDTO> examFileViews = new ArrayList<>();
 
-        this.examFileRepository.findAllByExam(exam).forEach(examFile -> examFileViews.add(new ExamFileViewDTO()));
+        this.examFileRepository.findAllByExam(exam).forEach(examFile -> examFileViews.add(new ExamFileViewDTO(examFile)));
 
         return examFileViews;
     }
